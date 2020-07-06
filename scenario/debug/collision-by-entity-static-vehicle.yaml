@@ -37,3 +37,8 @@ Story:
           TargetEntity: hoge
           Name: ''
           Keep: False
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: False
