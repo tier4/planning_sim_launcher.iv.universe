@@ -28,6 +28,6 @@ Story:
       All:
         - Type: SimulationTime
           Rule: GreaterThan
-          Value: ${{ 10 - 3 }}
+          Value: ${{ 13 - 3 }}
           Name: ''
           Keep: True

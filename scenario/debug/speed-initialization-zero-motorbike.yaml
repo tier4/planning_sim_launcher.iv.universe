@@ -38,4 +38,8 @@ Story:
           Name: ''
           Keep: False
           Trigger: npc
-
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: True

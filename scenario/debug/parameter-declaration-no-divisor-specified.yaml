@@ -36,3 +36,8 @@ Story:
           Value: $parameter
           Name: ''
           Keep: True
+        - Type: SimulationTime
+          Rule: GreaterThan
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: True

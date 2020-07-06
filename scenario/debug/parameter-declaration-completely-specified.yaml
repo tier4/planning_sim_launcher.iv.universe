@@ -4,7 +4,7 @@ Map: kashiwanoha
 
 ParameterDeclaration:
   - Name: $parameter
-    Min: 0
+    Min: 10
     Max: 10
     NumDivisions: 1
 

@@ -34,3 +34,8 @@ Story:
           Value: $will-be-constant-zero
           Name: ''
           Keep: True
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: True

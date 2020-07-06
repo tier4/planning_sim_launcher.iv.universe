@@ -32,3 +32,8 @@ Story:
           Trigger: hoge
           Tolerance: 1
           Pose: *initial-pose
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: True
