@@ -49,3 +49,8 @@ Story:
           Value: 55
           Name: ''
           Keep: True
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: False

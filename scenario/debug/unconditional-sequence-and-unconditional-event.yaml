@@ -62,12 +62,7 @@ Story:
           Keep: False
           Trigger: e2
         - Type: SimulationTime
-          Rule: GreaterThan
-          Value: 0
-          Name: ''
-          Keep: True
-        - Type: SimulationTime
-          Rule: LessThan
-          Value: 5
+          Rule: gt
+          Value: 10
           Name: ''
           Keep: True

@@ -32,3 +32,8 @@ Story:
           Name: ''
           Keep: False
           Trigger: ego
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: False

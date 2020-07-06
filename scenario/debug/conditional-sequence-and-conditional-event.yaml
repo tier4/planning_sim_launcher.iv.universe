@@ -66,8 +66,3 @@ Story:
           Value: 20
           Name: ''
           Keep: True
-        - Type: SimulationTime
-          Rule: LessThan
-          Value: 25
-          Name: ''
-          Keep: True
