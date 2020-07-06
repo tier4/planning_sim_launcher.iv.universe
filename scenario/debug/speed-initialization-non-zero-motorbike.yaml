@@ -36,10 +36,10 @@ Story:
           Rule: Equal
           Value: *value
           Name: ''
-          Keep: False
+          Keep: True
           Trigger: npc
         - Type: SimulationTime
-          Rule: LessThan
+          Rule: gt
           Value: 10
           Name: ''
           Keep: False
