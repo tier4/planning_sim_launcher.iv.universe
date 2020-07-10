@@ -1,0 +1,58 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: ego
+
+Story:
+  Init:
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: AlwaysTrue
+          Name: 'pred-1'
+        - Any:
+            - Type: AlwaysFalse
+              Name: 'pred-2'
+            - Any:
+              # Empty logical-or is valid (returns false).
+            - All:
+              - Type: AlwaysTrue
+                Name: 'pred-3'
+              - Type: AlwaysFalse
+                Name: 'pred-4'
+            - All:
+              - Type: AlwaysTrue
+                Name: 'pred-5'
+              - All:
+                # Empty logical-and is valid (returns true).
+              - Type: AlwaysTrue
+                Name: 'pred-6'
+              - Type: AlwaysTrue
+                Name: 'pred-7'
+            - Type: AlwaysTrue
+              Name: 'pred-8'
+            - All:
+              - All:
+                - All:
+                  - All:
+                    - All:
+                      - Type: AlwaysTrue
+                        Name: 'pred-9'
