@@ -79,7 +79,7 @@ class Launcher:
             self.log_output_type)
 
     def terminate(self):
-        self.client.terminate(100)
+        self.client.terminate(1)
 
     def waitUntilSimulationFinished(self):
         start = time.time()
@@ -126,13 +126,13 @@ class Launcher:
 
                 self.waitUntilSimulationFinished()
 
-                if self.client.status() == 0:
+                if self.client.status() == 0: # boost::exit_success
                     print('    \x1b[1;32m=> Success\x1b[0m')
-                elif self.client.status() == 1:
+                elif self.client.status() == 201: # boost::exit_test_failure
                     print('    \x1b[1;31m=> Failure\x1b[0m')
-                elif self.client.status() == 100:
+                elif self.client.status() == 1: # boost::exit_failure
                     print('    \x1b[1;31m=> Aborted\x1b[0m')
-                elif self.client.status() == 200:
+                elif self.client.status() == 201: # boost::exit_exception_failure
                     print('    \x1b[1;31m=> Invalid\x1b[0m')
                 else:
                     sys.stdout.write('    \x1b[1;33m=> Broken (')
