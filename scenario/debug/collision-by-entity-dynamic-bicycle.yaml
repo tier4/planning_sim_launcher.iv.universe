@@ -39,11 +39,11 @@ Story:
               W: 0.8558
             FrameId: /map
           Speed: 10
-        Actions:
-          - Type: FollowRoute
-            Params:
-              GoalPose:
-                Pose: *ego-initial-pose
+        # Actions:
+        #   - Type: FollowRoute
+        #     Params:
+        #       GoalPose:
+        #         Pose: *ego-initial-pose
   EndCondition:
     Success:
       All:
