@@ -65,17 +65,20 @@ class Launcher:
         return path
 
     def start(self, scenario_path):
-        log_directory = self.loader.absolute(self.database["log_output_base_dir"])
+        if self.args.log_output_base_dir:
+            log_output_base_dir = os.path.abspath(self.args.log_output_base_dir)
+        else:
+            log_output_base_dir = self.loader.absolute(self.database["log_output_base_dir"])
 
-        if not os.path.exists(log_directory):
-            os.makedirs(log_directory)
+        if not os.path.exists(log_output_base_dir):
+            os.makedirs(log_output_base_dir)
 
         self.client.start(
             self.launch_path(),
             scenario_path,
             self.parser.getScenarioId(),
             self.map_path(),
-            log_directory,
+            log_output_base_dir,
             self.log_output_type)
 
     def terminate(self):
@@ -157,6 +160,9 @@ if __name__ == "__main__":
 
     parser.add_argument('--log-output', default='screen',
             help='Specify the type of log output.')
+
+    parser.add_argument('--log-output-base-dir',
+            help='Specify the directory log output to.')
 
     parser.add_argument('--scenario',
             help='Specify the scenario you want to execute.')
