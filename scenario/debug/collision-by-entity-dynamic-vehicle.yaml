@@ -51,9 +51,9 @@ Story:
           Trigger: ego
           TargetEntity: hoge
           Name: ''
-          Keep: False
+          Keep: True
         - Type: SimulationTime
           Rule: gt
           Value: 10
           Name: 'Immediate termination prevention'
-          Keep: False
+          Keep: True
