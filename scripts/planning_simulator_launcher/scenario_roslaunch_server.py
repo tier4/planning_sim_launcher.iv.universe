@@ -15,7 +15,8 @@ class ScenarioRoslaunchServer():
 
     def __init__(self):
         signal.signal(signal.SIGINT, self.signal_handler)
-        self.server = xmlrpc_server.SimpleXMLRPCServer(("localhost", 10000),allow_none=True)
+        self.server = xmlrpc_server.SimpleXMLRPCServer(
+                ("localhost", 10000), allow_none=True, logRequests=False)
         self.server.register_introspection_functions()
         self.parent = None
         self.simulation_runnig = False

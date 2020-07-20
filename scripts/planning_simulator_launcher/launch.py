@@ -167,7 +167,7 @@ class Launcher:
                         result_directory, 'result-of-' + os.path.basename(path))
 
                 with open(result_path, 'w') as file:
-                    json.dump(result, file, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
+                    json.dump(result, file, indent=2, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='launch simulator')
