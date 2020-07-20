@@ -130,7 +130,9 @@ class Launcher:
                 self.waitUntilSimulationFinished()
 
                 result = {}
-                result["message"] = ''
+                result['duration'] = self.client.current_duration()
+                result['message'] = ''
+                result['mileage'] = self.client.current_mileage()
 
                 if self.client.status() == 0: # boost::exit_success
                     result["code"] = 'exit_success'
@@ -164,10 +166,7 @@ class Launcher:
                         result_directory, 'result-of-' + os.path.basename(path))
 
                 with open(result_path, 'w') as file:
-                    json.dump(result, file)
-
-                # print(os.path.dirname(scenario_path))
-                # print(json.dumps(result))
+                    json.dump(result, file, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='launch simulator')
