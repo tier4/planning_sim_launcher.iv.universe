@@ -130,28 +130,29 @@ class Launcher:
                 self.waitUntilSimulationFinished()
 
                 result = {}
+
+                result['code'] = self.client.status()
                 result['duration'] = self.client.current_duration()
-                result['message'] = ''
                 result['mileage'] = self.client.current_mileage()
 
                 if self.client.status() == 0: # boost::exit_success
-                    result["code"] = 'exit_success'
+                    result['message'] = 'exit_success'
                     print('    \x1b[1;32m=> Success\x1b[0m')
 
                 elif self.client.status() == 201: # boost::exit_test_failure
-                    result["code"] = 'exit_test_failure'
+                    result['message'] = 'exit_test_failure'
                     print('    \x1b[1;31m=> Failure\x1b[0m')
 
                 elif self.client.status() == 1: # boost::exit_failure
-                    result["code"] = 'exit_failure'
+                    result['message'] = 'exit_failure'
                     print('    \x1b[1;31m=> Aborted\x1b[0m')
 
                 elif self.client.status() == 201: # boost::exit_exception_failure
-                    result["code"] = 'exit_exception_failure'
+                    result['message'] = 'exit_exception_failure'
                     print('    \x1b[1;31m=> Invalid\x1b[0m')
 
                 else:
-                    result["code"] = 'exit_success'
+                    result['message'] = 'scenario_runner broken'
                     sys.stdout.write('    \x1b[1;33m=> Broken (')
                     sys.stdout.write(str(self.client.status()))
                     print(')\x1b[0m')
