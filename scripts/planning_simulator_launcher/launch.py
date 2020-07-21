@@ -100,6 +100,45 @@ class Launcher:
             print('    The scenario is likely to be in a deadlock.')
             self.terminate()
 
+    def write_result(self, path, uuid):
+        result = {}
+
+        result['code']     = self.client.status()
+        result['duration'] = self.client.current_duration()
+        result['mileage']  = self.client.current_mileage()
+
+        if self.client.status() == 0: # boost::exit_success
+            result['message'] = 'exit_success'
+            print('    \x1b[1;32m=> Success\x1b[0m')
+
+        elif self.client.status() == 201: # boost::exit_test_failure
+            result['message'] = 'exit_test_failure'
+            print('    \x1b[1;31m=> Failure\x1b[0m')
+
+        elif self.client.status() == 1: # boost::exit_failure
+            result['message'] = 'exit_failure'
+            print('    \x1b[1;31m=> Aborted\x1b[0m')
+
+        elif self.client.status() == 201: # boost::exit_exception_failure
+            result['message'] = 'exit_exception_failure'
+            print('    \x1b[1;31m=> Invalid\x1b[0m')
+
+        else:
+            result['message'] = 'scenario_runner broken'
+            sys.stdout.write('    \x1b[1;33m=> Broken (')
+            sys.stdout.write(str(self.client.status()))
+            print(')\x1b[0m')
+
+        result_directory = os.path.join(os.path.dirname(path), 'results')
+
+        if not os.path.exists(result_directory):
+            os.makedirs(result_directory)
+
+        result_path = os.path.join(result_directory, 'result-of-' + uuid)
+
+        with open(result_path, 'w') as file:
+            json.dump(result, file, indent=2, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
+
     def run_all_scenario(self):
         if self.args.scenario:
             scenarios = [ os.path.abspath(self.args.scenario) ]
@@ -129,45 +168,7 @@ class Launcher:
 
                 self.waitUntilSimulationFinished()
 
-                result = {}
-
-                result['code'] = self.client.status()
-                result['duration'] = self.client.current_duration()
-                result['mileage'] = self.client.current_mileage()
-
-                if self.client.status() == 0: # boost::exit_success
-                    result['message'] = 'exit_success'
-                    print('    \x1b[1;32m=> Success\x1b[0m')
-
-                elif self.client.status() == 201: # boost::exit_test_failure
-                    result['message'] = 'exit_test_failure'
-                    print('    \x1b[1;31m=> Failure\x1b[0m')
-
-                elif self.client.status() == 1: # boost::exit_failure
-                    result['message'] = 'exit_failure'
-                    print('    \x1b[1;31m=> Aborted\x1b[0m')
-
-                elif self.client.status() == 201: # boost::exit_exception_failure
-                    result['message'] = 'exit_exception_failure'
-                    print('    \x1b[1;31m=> Invalid\x1b[0m')
-
-                else:
-                    result['message'] = 'scenario_runner broken'
-                    sys.stdout.write('    \x1b[1;33m=> Broken (')
-                    sys.stdout.write(str(self.client.status()))
-                    print(')\x1b[0m')
-
-                result_directory = os.path.join(
-                        os.path.dirname(scenario_path), 'results')
-
-                if not os.path.exists(result_directory):
-                    os.makedirs(result_directory)
-
-                result_path = os.path.join(
-                        result_directory, 'result-of-' + os.path.basename(path))
-
-                with open(result_path, 'w') as file:
-                    json.dump(result, file, indent=2, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
+                self.write_result(scenario_path, os.path.basename(path))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='launch simulator')
