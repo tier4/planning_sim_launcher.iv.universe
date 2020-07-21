@@ -134,7 +134,7 @@ class Launcher:
         if not os.path.exists(result_directory):
             os.makedirs(result_directory)
 
-        result_path = os.path.join(result_directory, 'result-of-' + uuid)
+        result_path = os.path.join(result_directory, 'result-of-' + uuid + '.json')
 
         with open(result_path, 'w') as file:
             json.dump(result, file, indent=2, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
@@ -168,7 +168,10 @@ class Launcher:
 
                 self.waitUntilSimulationFinished()
 
-                self.write_result(scenario_path, os.path.basename(path))
+                self.write_result(
+                        scenario_path,
+                        os.path.splitext(os.path.basename(path))[0])
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='launch simulator')
