@@ -129,12 +129,15 @@ class Launcher:
             sys.stdout.write(str(self.client.status()))
             print(')\x1b[0m')
 
-        result_directory = os.path.join(os.path.dirname(path), 'results')
+        if self.args.log_output_base_dir:
+            log_output_base_dir = os.path.abspath(self.args.log_output_base_dir)
+        else:
+            log_output_base_dir = self.loader.absolute(self.database["log_output_base_dir"])
 
-        if not os.path.exists(result_directory):
-            os.makedirs(result_directory)
+        if not os.path.exists(log_output_base_dir):
+            os.makedirs(log_output_base_dir)
 
-        result_path = os.path.join(result_directory, 'result-of-' + uuid + '.json')
+        result_path = os.path.join(log_output_base_dir, 'result-of-' + uuid + '.json')
 
         with open(result_path, 'w') as file:
             json.dump(result, file, indent=2, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
