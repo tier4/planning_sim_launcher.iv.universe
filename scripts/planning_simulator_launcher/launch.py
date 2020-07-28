@@ -111,12 +111,12 @@ class Launcher:
             result['message'] = 'exit_success'
             print('    \x1b[1;32m=> Success\x1b[0m')
 
-        elif self.client.status() == 201: # boost::exit_test_failure
-            result['message'] = 'exit_test_failure'
+        elif self.client.status() == 200: # boost::exit_test_failure
+            result['message'] = 'exit_failure'
             print('    \x1b[1;31m=> Failure\x1b[0m')
 
-        elif self.client.status() == 1: # boost::exit_failure
-            result['message'] = 'exit_failure'
+        elif self.client.status() == 1: # boost::exit_time_over_failure
+            result['message'] = 'exit_time_over_failure'
             print('    \x1b[1;31m=> Aborted\x1b[0m')
 
         elif self.client.status() == 201: # boost::exit_exception_failure
