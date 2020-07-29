@@ -48,9 +48,9 @@ configure_file(
 
 # ==== Miscallenous ============================================================
 
-# install(
-#   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/launch
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 # install(
 #   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/rviz
