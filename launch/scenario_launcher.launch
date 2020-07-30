@@ -4,6 +4,7 @@
   <arg name="map_path"/>
   <arg name="sensor_model"/>
   <arg name="vehicle_model"/>
+  <arg name="rviz" default="true"/>
   <arg name="use_object_recognition" default="true"/>
 
   <!-- Parameters for Scenario Runner -->
@@ -22,15 +23,20 @@
     <arg name="map_path" value="$(arg map_path)"/>
     <arg name="sensor_model" value="$(arg sensor_model)"/>
     <arg name="vehicle_model" value="$(arg vehicle_model)"/>
+
     <!-- planning_simulator.launch's optional parameters -->
+    <arg name="rviz" value="$(arg rviz)"/>
     <arg name="rviz_args" value="-d $(find scenario_api)/rviz/planning_simulator.rviz"/>
+
     <!-- simple_planning_simulator.launch's optional parameters -->
     <arg name="initial_engage_state" value="false"/>
+
     <!-- dummy_perception_publisher.launch's optional parameters -->
     <arg name="real" value="false" />
     <arg name="visible_range" value="1000" />
     <arg name="use_object_recognition" value="$(arg use_object_recognition)" />
   </include>
+
   <include file="$(find npc_simulator)/launch/npc_simulator.launch">
     <arg name="initial_engage_state" value="false"/>
   </include>
