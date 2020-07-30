@@ -17,6 +17,8 @@
     <arg name="map_path" value="$(arg map_path)"/>
     <arg name="sensor_model" value="aip_xx1"/> <!-- TODO CONVERT TO ARGUMENT -->
     <arg name="vehicle_model" value="lexus"/> <!-- TODO CONVERT TO ARGUMENT -->
+    <!-- planning_simulator.launch's optional parameters -->
+    <arg name="rviz_args" value="-d $(find scenario_api)/rviz/planning_simulator.rviz"/>
     <!-- vehicle.launch's optional parameters -->
     <arg name="initial_engage_state" value="false"/>
     <!-- dummy_perception_publisher.launch's optional parameters -->
