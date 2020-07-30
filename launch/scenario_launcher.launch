@@ -1,24 +1,39 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="log_output_dir"/>
   <arg name="map_path"/>
-  <arg name="log_output_dir" default=""/>
-  <arg name="scenario_id" default=""/>
-  <arg name="scenario_path" default=""/>
+  <arg name="scenario_id"/>
+  <arg name="scenario_path"/>
   <arg name="scenario_runner_output" default="screen"/>
+  <arg name="use_object_recognition" default="true" />
 
+  <!-- Simulation Clock -->
   <arg name="use_sim_time" default="false"/>
   <param name="/use_sim_time" value="$(arg use_sim_time)"/>
 
-  <include file="$(find scenario_api)/launch/scenario.launch">
+  <!-- Planning Simulator -->
+  <include file="$(find autoware_launch)/launch/planning_simulator.launch">
+    <!-- planning_simulator.launch's essential parameters -->
     <arg name="map_path" value="$(arg map_path)"/>
+    <arg name="sensor_model" value="aip_xx1"/> <!-- TODO CONVERT TO ARGUMENT -->
+    <arg name="vehicle_model" value="lexus"/> <!-- TODO CONVERT TO ARGUMENT -->
+    <!-- vehicle.launch's optional parameters -->
+    <arg name="initial_engage_state" value="false"/>
+    <!-- dummy_perception_publisher.launch's optional parameters -->
+    <arg name="real" value="false" />
+    <arg name="visible_range" value="1000" />
+    <arg name="use_object_recognition" value="$(arg use_object_recognition)" />
+  </include>
+  <include file="$(find npc_simulator)/launch/npc_simulator.launch">
+    <arg name="initial_engage_state" value="false"/>
   </include>
 
+  <!-- Scenario Runner -->
   <node pkg="scenario_runner" type="scenario_runner_node" name="scenario_runner_node" output="$(arg scenario_runner_output)">
     <param name="camera_frame_id" value="camera5/camera_optical_link"/> <!-- base link of front camera -->
     <param name="log_output_path" value="$(arg log_output_dir)/$(arg scenario_id).json"/>
     <param name="scenario_id" value="$(arg scenario_id)"/>
     <param name="scenario_path" value="$(arg scenario_path)"/>
-
     <remap from="~input/autoware_state" to="/autoware/state"/>
     <remap from="~input/pointcloud" to="/sensing/lidar/no_ground/pointcloud"/>
     <remap from="~input/route" to="/planning/mission_planning/route"/>
@@ -41,5 +56,6 @@
     <remap from="~rosparam/simulator_pos_noise" to="/simple_planning_simulator/pos_noise_stddev"/> <!-- rosparam: std of simulator pos noise -->
   </node>
 
+  <!-- Recording -->
   <node pkg="rosbag" type="record" name="rosbag_recorder" output="screen" respawn="false" respawn_delay="0" args="record --lz4 -a -O $(arg log_output_dir)/$(arg scenario_id).bag"/>
 </launch>
