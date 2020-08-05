@@ -32,9 +32,9 @@
     <arg name="initial_engage_state" value="false"/>
 
     <!-- dummy_perception_publisher.launch's optional parameters -->
-    <arg name="real" value="false" />
-    <arg name="visible_range" value="1000" />
-    <arg name="use_object_recognition" value="$(arg use_object_recognition)" />
+    <arg name="perception/enable_detection_failure" value="false" />
+    <arg name="perception/enable_object_recognition" value="$(arg use_object_recognition)" />
+    <arg name="sensing/visible_range" value="1000" />
   </include>
 
   <include file="$(find npc_simulator)/launch/npc_simulator.launch">
