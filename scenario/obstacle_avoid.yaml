@@ -1,0 +1,101 @@
+ScenarioFormatVersion : 0.0.1
+
+ParameterDeclaration:
+  - Name: $egocar_initial_speed # [10, 20, 30, 40] kmph
+    Min:  2.77778
+    Max: 11.11111
+    NumDivisions: 4
+    Default: 2.77778
+
+Map : /home/masaya-autoware/data/map/kashiwanoha
+
+Entity:
+  - Name: EgoCar
+    Type: Ego
+    Urdf: /path/to/urdf
+    InitialFrameId : initial_pose
+  - Name: ObjCar1
+    Type: Vehicle
+
+Story:
+  Init:
+    Entity:
+      - Name: EgoCar
+        InitialStates:
+          Pose:
+            Position: # 1
+              X: 3713.62637522
+              Y: 73771.2261035
+              Z: 0.0
+            Orientation:
+              X: 0.0
+              Y: 0.0
+              Z: 0.211657014882
+              W: 0.977344001583
+            FrameId: /map
+          InitialSpeed: $egocar_initial_speed
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: # 4
+                  Position:
+                    X: 3812.88105344
+                    Y: 73806.9201513
+                    Z: 0
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: -0.50828126764
+                    W: 0.861191121881
+                  FrameId : /map
+      - Name: ObjCar1
+        InitialStates:
+          Pose: # 2
+            Position:
+              X: 3765.38382281
+              Y: 73798.6292328
+              Z: 0.0
+            Orientation:
+              X: 0.0
+              Y: 0.0
+              Z: 0.235651429881
+              W: 0.971837634491
+            FrameId: /map
+          Speed: 0.0
+  EndCondition:
+    Success:
+      All:
+        - Type: ReachPosition
+          Name: EgoReachGoal
+          Trigger: EgoCar
+          Keep: True
+          Pose: # 4
+            Position:
+              X: 3812.88105344
+              Y: 73806.9201513
+              Z: 0.0
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.50828126764
+              W: 0.861191121881
+            FrameId: /map
+          Tolerance: 0.5
+        - Type: Speed
+          Name: EgoStop
+          Trigger: EgoCar
+          Keep: False
+          Value: 0.1
+          Rule: LessThan
+    Failure:
+      Any:
+        - Type: CollisionByEntity
+          Name: EgoCollideToObjCar1
+          Trigger: EgoCar
+          TargetEntity: ObjCar1
+        - Type: SimulationTime
+          Name: Simulation time limit
+          Rule: GreaterThan
+          Value: 300 # [sec]
+

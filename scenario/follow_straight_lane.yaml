@@ -1,0 +1,68 @@
+ScenarioFormatVersion: 0.0.1
+
+ParameterDeclaration:
+- Name: $variable1
+  Default: 15
+  Min: 15
+  Max: 30
+  NumDivisions: 3
+
+Map: /home/yamasa/Downloads/kashiwanoha
+
+Entity:
+  - Name: EgoCar
+    Type: Ego
+    Urdf: /path/to/urdf
+    InitialFrameId: initial_pose
+
+Story:
+  Init:
+    Entity:
+      - Name: EgoCar
+        InitialStates:
+          Pose:
+            Position:
+              X: 3711.82006836
+              Y: 73720.71875
+              Z: 0.0
+            Orientation:
+              X: 0.0
+              Y: 0.0
+              Z: 0.213143293703
+              W: 0.977020949801
+            FrameId: /map
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose:
+                  Position:
+                    X: $variable1
+                    Y: 0
+                    Z: 0
+                  Orientation:
+                    X: 0.0
+                    Y: 0.0
+                    Z: 0.0
+                    W: 1.0
+                  FrameId: initial_pose
+  EndCondition:
+    Success:
+      All:
+        - Type: ReachPosition
+          Name: EgoReachGoal
+          Trigger: EgoCar
+          Keep: True
+          Pose:
+            Position:
+              X: $variable1
+              Y: 0
+              Z: 0
+            Orientation:
+              X: 0.0
+              Y: 0.0
+              Z: 0.0
+              W: 1.0
+            FrameId: initial_pose
+          Tolerance : 0.5
+

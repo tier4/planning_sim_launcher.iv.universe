@@ -1,0 +1,53 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Name: e1
+    Type: Ego
+  - Name: e2
+    Type: Vehicle
+
+Story:
+  Init:
+    Entity:
+      - Name: e1
+        InitialStates:
+          Pose: &e1-initial-pose
+            Position:
+              X: 3783.7396
+              Y: 73803.6474
+              Z: -1.2774
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0.2358
+              W: 0.9718
+            FrameId: /map
+          Speed: 0
+      - Name: e2
+        InitialStates:
+          Pose: &e2-initial-pose
+            Position:
+              X: 3709.7361
+              Y: 73769.2454
+              Z: 0.2109
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0.2354
+              W: 0.9719
+            FrameId: /map
+          Speed: 5
+        Actions:
+          - Type: LaneChange
+            Params:
+              TargetLanelet: 34468
+  EndCondition:
+    Success:
+      All:
+        - Type: CollisionByEntity
+          Trigger: e1
+          TargetEntity: e2
+          Name: ''
+          Keep: True

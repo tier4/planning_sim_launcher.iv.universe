@@ -1,0 +1,10 @@
+{
+    "launch_path" : "${CMAKE_CURRENT_SOURCE_DIR}/launch/planning_simulator.launch",
+    "log_output_base_dir" : "${CMAKE_CURRENT_SOURCE_DIR}/scenario/log",
+    "map" : {
+        "kashiwanoha" : "${CMAKE_CURRENT_SOURCE_DIR}"
+    },
+    "scenario": [
+        "${${PROJECT_NAME}_DEFAULT_SCENARIOS}"
+    ]
+}

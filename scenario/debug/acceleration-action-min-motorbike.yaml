@@ -1,0 +1,47 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: ego
+  - Type: MotorBike
+    Name: hoge
+
+Story:
+  Init:
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &ego-initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 0
+      - Name: hoge
+        InitialStates:
+          Pose: *ego-initial-pose
+          Speed: 10
+        Actions:
+          - Type: Acceleration
+            Params:
+              Min: -1.0
+          - Type: Speed
+            Params:
+              Value: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: Acceleration
+          Rule: LessThan
+          Value: -0.9
+          Name: ''
+          Keep: False
+          Trigger: hoge

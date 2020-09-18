@@ -1,0 +1,47 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: ego
+
+ParameterDeclaration:
+  - Name: $x
+    Min: 1
+    Max: &x-max 1
+    NumDivisions: 1
+  - Name: $y
+    Min: 2
+    Max: &y-max 4
+    NumDivisions: 2
+  - Name: $z
+    Min: 3
+    Max: &z-max 9
+    NumDivisions: 3
+
+Story:
+  Init:
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: SimulationTime
+          Rule: GreaterThan
+          Value: ${{ $x + $y + $z }}
+          Name: ''
+          Keep: True

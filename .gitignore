@@ -1,0 +1,7 @@
+*.pyc
+.vscode
+generated
+scenario/log/*
+scenario_database.json
+scenario_database_autoconf.json
+scripts/planning_simulator_launcher/scenario_loader.py

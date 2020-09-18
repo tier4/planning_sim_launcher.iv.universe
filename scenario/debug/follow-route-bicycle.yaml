@@ -1,0 +1,55 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: ego
+  - Type: Bicycle
+    Name: hoge
+
+Story:
+  Init:
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &ego-initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 0
+      - Name: hoge
+        InitialStates:
+          Pose: *ego-initial-pose
+          Speed: 10
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: &hoge-goal-pose
+                  Position:
+                    X: 3777.1538
+                    Y: 73726.7843
+                    Z: 1.25
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: -0.5277
+                    W: 0.8494
+                  FrameId: /map
+  EndCondition:
+    Success:
+      All:
+        - Type: ReachPosition
+          Name: ''
+          Keep: True
+          Trigger: hoge
+          Tolerance: 1
+          Pose: *hoge-goal-pose

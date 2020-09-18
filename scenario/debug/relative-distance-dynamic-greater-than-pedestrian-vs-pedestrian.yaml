@@ -1,0 +1,78 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Name: e1
+    Type: Pedestrian
+  - Name: e2
+    Type: Pedestrian
+  - Name: e3
+    Type: Ego
+
+Story:
+  Init:
+    Entity:
+      - Name: e1
+        InitialStates:
+          Pose: &e1-initial-pose
+            Position:
+              X: 3721.5012
+              Y: 73775.1345
+              Z: -0.0494
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0.2341
+              W: 0.9722
+            FrameId: /map
+          Speed: 10
+          InitialSpeed: 10
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: &e1-goal-pose
+                  Position:
+                    X: 3777.6737
+                    Y: 73803.9074
+                    Z: -2.3393
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: 0.2395
+                    W: 0.9709
+                  FrameId: /map
+      - Name: e2
+        InitialStates:
+          Pose: &e2-initial-pose
+            Position:
+              X: 3706.5299
+              Y: 73767.6855
+              Z: 0.2329
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0.2394
+              W: 0.9709
+            FrameId: /map
+          Speed: 3
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: *e1-goal-pose
+      - Name: e3
+        InitialStates:
+          Pose: *e2-initial-pose
+          Speed: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: RelativeDistance
+          Trigger: e1
+          TargetEntity: e2
+          Rule: GreaterThan
+          Value: 20
+          Name: ''
+          Keep: True

@@ -1,0 +1,87 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Bicycle
+    Name: e1
+  - Type: Pedestrian
+    Name: e2
+  - Type: Ego
+    Name: e3
+
+Story:
+  Init:
+    Entity:
+      - Name: e1
+        InitialStates:
+          Pose: &e1-initial-pose
+            Position:
+              X: 3752.2638
+              Y: 73771.6684
+              Z: 0.1029
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5272
+              W: 0.8498
+            FrameId: /map
+          Speed: 5
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: &e1-goal-pose
+                  Position:
+                    X: 3777.5871
+                    Y: 73722.7982
+                    Z: 0.8748
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: -0.4408
+                    W: 0.8976
+                  FrameId: /map
+      - Name: e2
+        InitialStates:
+          Pose: &e2-initial-pose
+            Position:
+              X: 3774.6408
+              Y: 73721.7583
+              Z: 2.0616
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0.8486
+              W: 0.5291
+            FrameId: /map
+          Speed: 5
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: &e2-goal-pose
+                  Position:
+                    X: 3749.7708
+                    Y: 73769.8519
+                    Z: -0.9965
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: 0.8567
+                    W: 0.5158
+                  FrameId: /map
+      - Name: e3
+        InitialStates:
+          Pose: *e1-initial-pose
+          Speed: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: RelativeDistance
+          Trigger: e1
+          TargetEntity: e2
+          Rule: LessThan
+          Value: 20
+          Name: ''
+          Keep: True
