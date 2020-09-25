@@ -1,10 +1,10 @@
-# Autoware-T4B - Scenario Launcher
+# Autoware Planning Simulator Launcher
 
-Scenario Launcher is being developed to assist in the definitive planning
+Planning Simulator Launcher is being developed to assist in the definitive planning
 simulation of Autoware.
 
 Simulations are described in a YAML-based format called a "scenario".
-The format has been specified at [Scenario Format Specification](https://github.com/tier4/ScenarioFormat/blob/master/format/definition.md) .
+The format has been specified at [Scenario Format Specification (TBU)](https://github.com/tier4/ScenarioFormat/blob/master/format/definition.md) .
 This repository provides a reference implementation of the format's interpreter (Scenario Runner).
 
 <br/>
@@ -21,8 +21,8 @@ This repository provides a reference implementation of the format's interpreter 
 
 ## 1. Setup
 
-All the components needed to run the scenario, including this repository, are installed together in the autoware.proj setup.
-See [https://github.com/tier4/autoware.proj#how-to-setup](https://github.com/tier4/autoware.proj#how-to-setup).
+All the components needed to run the scenario, including this repository, are installed together in the AutowareArchitectureProposal setup.
+See [https://github.com/tier4/AutowareArchitectureProposal#how-to-setup](https://github.com/tier4/AutowareArchitectureProposal#how-to-setup).
 
 <br/>
 
@@ -32,7 +32,7 @@ See [https://github.com/tier4/autoware.proj#how-to-setup](https://github.com/tie
 
 ### 2.1 Get Sample Scenario
 
-Tested scenarios can be found at [https://github.com/tier4/planning_sim_launcher/tree/master/scenario](https://github.com/tier4/planning_sim_launcher/tree/master/scenario).
+Tested scenarios can be found at [https://github.com/tier4/planning_sim_launcher.iv.universe/tree/master/scenario](https://github.com/tier4/planning_sim_launcher.iv.universe/tree/master/scenario).
 The examples placed in the repository tier4/ScenarioFormat are "examples of desired descriptions" and do not imply that this repository has already implemented them.
 
 ### 2.2 Procedure
@@ -40,7 +40,7 @@ The examples placed in the repository tier4/ScenarioFormat are "examples of desi
 #### (1) Make `scenario_database.json`
 
 ``` shell
-cd /path/to/autoware.proj/src/simulator/planning_simulator_launcher
+cd /path/to/AutowareArchitectureProposal/src/simulator/planning_simulator_launcher
 cp scenario_database_template.json scenario_database.json
 ```
 
@@ -70,7 +70,7 @@ Note that the Map path must be rewritten when sharing a scenario with multiple u
 
 ``` shell
 source /opt/ros/melodic/setup.bash
-source /path/to/autoware.proj/install/setup.bash
+source /path/to/AutowareArchitectureProposal/install/setup.bash
 
 rosrun planning_simulator_launcher scenario_roslaunch_server.py
 ```
@@ -79,7 +79,7 @@ rosrun planning_simulator_launcher scenario_roslaunch_server.py
 
 ``` shell
 source /opt/ros/melodic/setup.bash
-source /path/to/autoware.proj/install/setup.bash
+source /path/to/AutowareArchitectureProposal/install/setup.bash
 
 rosrun planning_simulator_launcher launch.py --timeout=180 && rosrun planning_simulator_launcher show_result.py ./scenario/generated ./scenario/log
 ```
