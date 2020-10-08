@@ -1,0 +1,39 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: hoge
+
+Story:
+  Init:
+    Entity:
+      - Name: hoge
+        InitialStates:
+          Pose: &initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 100
+  EndCondition:
+    Success:
+      All:
+        - Type: ReachPosition
+          Name: ''
+          Keep: True
+          Trigger: hoge
+          Tolerance: 1
+          Pose: *initial-pose
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: True

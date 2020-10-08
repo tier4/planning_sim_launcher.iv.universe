@@ -1,0 +1,52 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Intersection:
+  - Name: intersection
+    TrafficLightId:
+      - &id 34806
+    Control:
+      - StateName: state
+        TrafficLight:
+          - Id: *id
+            Color: Red
+            Arrows:
+
+Entity:
+  - Type: Ego
+    Name: ego
+
+Story:
+  Init:
+    Intersection:
+      - Name: intersection
+        InitialState: state
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &ego-initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: Signal
+          Trigger: intersection
+          State: state
+          Keep: True
+          Name: ''
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: False

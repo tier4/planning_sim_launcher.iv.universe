@@ -1,0 +1,59 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: ego
+  - Type: Bicycle
+    Name: hoge
+
+Story:
+  Init:
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &ego-initial-pose
+            Position:
+              X: 3775.4903
+              Y: 73726.7719
+              Z: 0.736
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0
+              W: 1
+            FrameId: /map
+          Speed: 0
+      - Name: hoge
+        InitialStates:
+          Pose:
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 10
+        # Actions:
+        #   - Type: FollowRoute
+        #     Params:
+        #       GoalPose:
+        #         Pose: *ego-initial-pose
+  EndCondition:
+    Success:
+      All:
+        - Type: CollisionByEntity
+          Trigger: ego
+          TargetEntity: hoge
+          Name: ''
+          Keep: True
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: True

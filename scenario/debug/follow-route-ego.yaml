@@ -1,0 +1,49 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Type: Ego
+    Name: ego
+
+Story:
+  Init:
+    Entity:
+      - Name: ego
+        InitialStates:
+          Pose: &ego-initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 42
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose: &ego-goal-pose
+                  Position:
+                    X: 3775.4903
+                    Y: 73726.7719
+                    Z: 0.736
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: -0.5277
+                    W: 0.8494
+                  FrameId: /map
+  EndCondition:
+    Success:
+      All:
+        - Type: ReachPosition
+          Name: ''
+          Keep: True
+          Trigger: ego
+          Tolerance: 1
+          Pose: *ego-goal-pose

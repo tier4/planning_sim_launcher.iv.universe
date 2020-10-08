@@ -1,0 +1,62 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Name: e1
+    Type: Bicycle
+  - Name: e2
+    Type: Pedestrian
+  - Name: e3
+    Type: Ego
+
+Story:
+  Init:
+    Entity:
+      - Name: e1
+        InitialStates:
+          Pose: &e1-initial-pose
+            Position:
+              X: 3752.2638
+              Y: 73771.6684
+              Z: 0.1029
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5272
+              W: 0.8498
+            FrameId: /map
+          Speed: 0
+      - Name: e2
+        InitialStates:
+          Pose: &e2-initial-pose
+            Position:
+              X: 3774.6408
+              Y: 73721.7583
+              Z: 2.0616
+            Orientation:
+              X: 0
+              Y: 0
+              Z: 0.8486
+              W: 0.5291
+            FrameId: /map
+          Speed: 0
+      - Name: e3
+        InitialStates:
+          Pose: *e1-initial-pose
+          Speed: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: RelativeDistance
+          Trigger: e1
+          TargetEntity: e2
+          Rule: LessThan
+          Value: 55
+          Name: ''
+          Keep: True
+        - Type: SimulationTime
+          Rule: gt
+          Value: 10
+          Name: 'Immediate termination prevention'
+          Keep: False

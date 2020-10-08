@@ -1,0 +1,145 @@
+ScenarioFormatVersion: 0.0.1
+
+ParameterDeclaration:
+  - Name: $initial_speed # [10, 20, 30, 40] kmph
+    Default: 2.77778
+    Max: 11.11111
+    Min: 2.77778
+    NumDivisions: 4
+
+Map: /home/masaya-autoware/data/map/kashiwanoha
+
+Entity:
+  - Name: EgoCar
+    Type: Ego
+    Urdf: /path_to_urdf
+    InitialFrameId: initial_pose
+  - Name: ObjCar1
+    Type: Vehicle
+
+Story:
+  Init:
+    Entity:
+      - Name: EgoCar
+        InitialStates:
+          Pose:
+            Position: # 1
+              X:  3694.67387741
+              Y: 73761.3514931
+              Z:     0
+            Orientation:
+              X: -0.00006850766642
+              Y:  0.0000919430771247
+              Z:  0.254713428972
+              W:  0.967016574809
+            FrameId: /map
+          Speed: $initial_speed
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose:
+                  Position: # 4
+                    X:  3820.97032508
+                    Y: 73791.2771848
+                    Z:    -2.9076207371
+                  Orientation:
+                    X:  4.82846120111e-05
+                    Y: -2.35813747318e-05
+                    Z: -0.525537306685
+                    W:  0.850770554495
+                  FrameId: /map
+      - Name: ObjCar1
+        InitialStates:
+          Pose:
+            Position: # 2
+              X:  3718.37112041
+              Y: 73770.1866925
+              Z:    -2.06450445814
+            Orientation:
+              X: 6.86306445679e-05
+              Y: 0.000110888126786
+              Z: 0.239427625428
+              W: 0.970914205878
+            FrameId: /map
+          Speed: $initial_speed
+        Actions:
+          - Type: FollowRoute
+            Params:
+              GoalPose:
+                Pose:
+                  Position: # 5
+                    X: 3792.08
+                    Y: 73758.2
+                    Z: -2.91
+                  Orientation:
+                    X: 0
+                    Y: 0
+                    Z: -0.9668
+                    W: 0.2554
+                  FrameId: /map
+  Act:
+    - Sequence:
+        Name: LaneChangeSequence
+        Events:
+          - Name: ObjCarLaneChangeEvent
+            Actors:
+              - ObjCar1
+            Actions:
+              - Type: LaneChange
+                Params:
+                  TargetLanelet: 34507
+            Condition:
+              Any:
+                - Type: ReachPosition
+                  Name: Maybe it will be true beyond the intersection.
+                  Trigger: ObjCar1
+                  Keep: true
+                  Pose:
+                    Position: # ?
+                      X: 3765.31332531
+                      Y: 73794.1984918
+                      Z: -2.1092744903776207371
+                    Orientation:
+                      X: 0
+                      Y: 0
+                      Z: 0
+                      W: 1
+                    FrameId: /map
+                  Tolerance: 1.0
+        StartCondition:
+          All:
+            - Type: SimulationTime
+              Name: Ignite immediately
+              Rule: gt
+              Value: 0
+  EndCondition:
+    Success:
+      All:
+        - Type: ReachPosition
+          Name: RP-1
+          Trigger: EgoCar
+          Keep: true
+          Pose:
+            Position: # 4
+              X:  3820.97032508
+              Y: 73791.2771848
+              Z:    -2.9076207371
+            Orientation:
+              X:  4.82846120111e-05
+              Y: -2.35813747318e-05
+              Z: -0.525537306685
+              W:  0.850770554495
+            FrameId: /map
+          Tolerance: 2
+    Failure:
+      Any:
+        - Type: CollisionByEntity
+          Name: CBE-1
+          Trigger: EgoCar
+          TargetEntity: ObjCar1
+        - Type: SimulationTime
+          Name: Simulation time limit
+          Value: 300 # [sec]
+          Rule: gt
+

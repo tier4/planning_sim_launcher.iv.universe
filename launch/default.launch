@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="map_path" default=""/> <!-- PROJECT REPOSITORY EDIT HERE! -->
+  <arg name="sensor_model" default="aip_xx1"/> <!-- PROJECT REPOSITORY EDIT HERE! -->
+  <arg name="vehicle_model" default="lexus"/> <!-- PROJECT REPOSITORY EDIT HERE! -->
+  <arg name="rviz" default="true"/>
+
+  <arg name="log_output_dir"/>
+  <arg name="scenario_id"/>
+  <arg name="scenario_path"/>
+  <arg name="scenario_runner_output" default="screen"/>
+
+  <include file="$(find planning_simulator_launcher)/launch/scenario_launcher.launch" pass_all_args="true"/>
+</launch>

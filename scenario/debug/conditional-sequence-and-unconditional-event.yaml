@@ -1,0 +1,68 @@
+ScenarioFormatVersion: 0.0.1
+
+Map: kashiwanoha
+
+Entity:
+  - Name: e1
+    Type: Ego
+  - Name: e2
+    Type: Vehicle
+
+Story:
+  Init:
+    Entity:
+      - Name: e1
+        InitialStates: &e1-initial-states
+          Pose: &e1-initial-pose
+            Position:
+              X: 3752.8888
+              Y: 73770.4452
+              Z: 0.0111
+            Orientation:
+              X: 0
+              Y: 0
+              Z: -0.5172
+              W: 0.8558
+            FrameId: /map
+          Speed: 0
+      - Name: e2
+        InitialStates: *e1-initial-states
+  Act:
+    - Sequence:
+        Name: ''
+        Events:
+          - Name: ''
+            Actors:
+              - e2
+            Actions:
+              - Type: Speed
+                Params:
+                  Value: &speed-value 10
+            Condition:
+              All:
+                - Type: SimulationTime
+                  Rule: GreaterThan
+                  Value: 0
+                  Name: ''
+                  Keep: True
+        StartCondition:
+          All:
+            - Type: SimulationTime
+              Rule: GreaterThan
+              Value: 10
+              Name: ''
+              Keep: True
+  EndCondition:
+    Success:
+      All:
+        - Type: Speed
+          Rule: Equal
+          Value: *speed-value
+          Name: ''
+          Keep: False
+          Trigger: e2
+        - Type: SimulationTime
+          Rule: GreaterThan
+          Value: 10
+          Name: ''
+          Keep: True

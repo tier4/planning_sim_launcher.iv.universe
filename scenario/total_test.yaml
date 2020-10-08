@@ -1,0 +1,403 @@
+ScenarioFormatVersion: 0.0.1
+
+ParameterDeclaration:
+- Name: $x
+  Min: 0
+  Max: 10
+  NumDivisions: 1
+- Name: $y
+  Min: 0
+  Max: 10
+  NumDivisions: 1
+- Name: $z
+  Min: 0
+  Max: 10
+  NumDivisions: 1
+- Name: $w
+
+Debug:
+  Expression:
+  - ${{ 1 + 2 + 3 }}
+  - ${{ 42**2 }}
+  - ${{ pi * 2 }}
+  - ${{ $x + $y + $z + $w }}
+
+Map: kashiwanoha
+
+Intersection:
+- Name: intersection-1
+  TrafficLightId:
+  - &Id 34806
+  Control:
+  - StateName: Stop # Old Format
+    TrafficLight:
+    - Id: *Id
+      Color: Red
+      Arrow: Left
+  - StateName: Go # Old Format
+    TrafficLight:
+    - Id: *Id
+      Color: Green
+  - StateName: Caution # Old Format
+    TrafficLight:
+    - Id: *Id
+      Color: Yellow
+      Arrow: StraightLeft
+  - StateName: Experimental-Stop
+    TrafficLight:
+    - Id: *Id
+      Color: Red
+      Arrows:
+      - Left
+      - Right
+      - Straight
+  - StateName: Experimental-Go
+    TrafficLight:
+    - Id: *Id
+      Color: Green
+      Arrows:
+      - Left
+      - Right
+      - Straight
+
+Entity:
+- Type: Ego
+  Name: ego-vehicle
+  Urdf: /path/to/urdf
+  InitialFrameId: initial_pose
+- Type: Vehicle
+  Name: vehicle-1
+- Type: Vehicle
+  Name: vehicle-2
+- Type: Bicycle
+  Name: bicycle-1
+- Type: Bicycle
+  Name: bicycle-2
+- Type: Pedestrian
+  Name: someone
+- Type: MotorBike
+  Name: motorbike-1
+
+Story:
+  Init:
+    Intersection:
+    - Name: intersection-1
+      InitialState: Caution
+    Entity:
+    - Name: ego-vehicle
+      InitialStates:
+        Pose: &ego-vehicle-initial-pose
+          Position:
+            X:  3713.62637522
+            Y: 73771.2261035
+            Z:     0.0
+          Orientation:
+            X: 0.0
+            Y: 0.0
+            Z: 0.211657014882
+            W: 0.977344001583
+          FrameId: /map
+        Speed: 0
+      Actions:
+      - Type: FollowRoute
+        Params:
+          GoalPose:
+            Pose: &ego-vehicle-goal-pose
+              Position:
+                X:  3711.82006836
+                Y: 73720.71875
+                Z:     0.0
+              Orientation:
+                X: 0.0
+                Y: 0.0
+                Z: 0.213143293703
+                W: 0.977020949801
+              FrameId: /map
+    - Name: vehicle-1
+      InitialStates:
+        Pose: &vehicle-1-initial-pose
+          Position:
+            X:  3718.37112041
+            Y: 73770.1866925
+            Z:    -2.06450445814
+          Orientation:
+            X: 6.86306445679e-05
+            Y: 0.000110888126786
+            Z: 0.239427625428
+            W: 0.970914205878
+          FrameId: /map
+        Speed: 0
+      Actions:
+      - Type: Acceleration
+        Params:
+          Max:  1
+      - Type: Speed
+        Params:
+          Value: 30
+      - Type: FollowRoute
+        Params:
+          GoalPose:
+            Pose: &vehicle-1-goal-pose
+              Position:
+                X:  3765.38382281
+                Y: 73798.6292328
+                Z:     0.0
+              Orientation:
+                X: 0.0
+                Y: 0.0
+                Z: 0.235651429881
+                W: 0.971837634491
+              FrameId: /map
+    - Name: vehicle-2
+      InitialStates:
+        Pose: &vehicle-2-initial-pose
+          Position:
+            X: 3812.88105344
+            Y: 73806.9201513
+            Z: 0
+          Orientation:
+            X: 0
+            Y: 0
+            Z: -0.50828126764
+            W: 0.861191121881
+          FrameId: /map
+        Speed: -3.0
+    - Name: someone
+      InitialStates:
+        Pose: *vehicle-1-goal-pose
+        Speed: 1
+      Actions:
+      - Type: Acceleration
+        Params:
+          Max:  1
+      - Type: Speed
+        Params:
+          Value: 30
+    - Name: bicycle-1
+      InitialStates:
+        Pose: &bicycle-1-initial-pose
+          Position: # 1
+            X:  3703.62637522
+            Y: 73769.2261035
+            Z:     0.0
+          Orientation:
+            X: 0.0
+            Y: 0.0
+            Z: 0.211657014882
+            W: 0.977344001583
+          FrameId: /map
+        Speed: 1
+      Actions:
+      - Type: Acceleration
+        Params:
+          Max:  1
+      - Type: Speed
+        Params:
+          Value: 10
+    - Name: bicycle-2
+      InitialStates:
+        Pose: *bicycle-1-initial-pose
+        Speed: -1.0
+      Actions:
+      - Type: Acceleration
+        Params:
+          Min: -1.0
+      - Type: Speed
+        Params:
+          Value: -10.0
+    - Name: motorbike-1
+      InitialStates:
+        Pose: *ego-vehicle-goal-pose
+        Speed: 0
+      Actions:
+      - Type: Acceleration
+        Params:
+          Max:  1
+      - Type: Speed
+        Params:
+          Value: 20
+      - Type: Enable
+        Params:
+          AutomaticEmergencyBraking: True
+  Act:
+  - Sequence:
+      Name: On intersection
+      Events:
+      - Name: Cut-in
+        Actors:
+        - vehicle-1
+        Actions:
+        - Type: LaneChange
+          Params:
+            TargetLanelet: 34507
+        Condition:
+          Any:
+          - Type: AlwaysTrue
+            Name: AlwaysTrue
+      - Name: Engine start
+        Actors:
+        - ego-vehicle
+        - ego-vehicle # DEBUG: dummy actor
+        - ego-vehicle # DEBUG: dummy actor
+        Actions:
+        - Type: Speed
+          Params:
+            Value: 20
+        Condition:
+          All:
+          - Type: SimulationTime
+            Name: After 10 sec
+            Keep: True
+            Rule: GreaterThan
+            Value: 10
+      StartCondition:
+        All:
+        - Type: SimulationTime
+          Name: Ignite immediately
+          Keep: True
+          Rule: GreaterThan
+          Value: 0
+  - Sequence:
+      Name: Change traffic signal to red
+      Events:
+      - Name: event-1
+        Actors:
+        - ego-vehicle
+        Actions:
+        - Type: ChangeSignal
+          Params:
+            TargetIntersection: intersection-1
+            State: Experimental-Stop
+        Condition:
+          Any:
+          - Type: AlwaysTrue
+            Name: AlwaysTrue
+      StartCondition:
+        All:
+        - Type: SimulationTime
+          Name: After 20 sec
+          Keep: True
+          Rule: GreaterThan
+          Value: 20
+  - Sequence:
+      Name: change traffic signal to green
+      Events:
+      - Name: event-2
+        Actors:
+        - ego-vehicle
+        Actions:
+        - Type: ChangeSignal
+          Params:
+            TargetIntersection: intersection-1
+            State: Experimental-Go
+        Condition:
+          Any:
+          - Type: AlwaysTrue
+            Name: AlwaysTrue
+      StartCondition:
+        All:
+        - Type: SimulationTime
+          Name: After 40 sec
+          Keep: True
+          Rule: GreaterThan
+          Value: 40
+        - Type: Acceleration
+          Name: If ego-vehicle completely stopped.
+          Keep: True
+          Trigger: ego-vehicle
+          Rule: LessEqual
+          Value: 0
+  - Sequence:
+      Name: To be obstable
+      Events:
+      - Name: To be obstacle
+        Actors:
+        - vehicle-2
+        Actions:
+        - Type: Acceleration
+          Params:
+            Min: 10
+        - Type: Speed
+          Params:
+            Value: 0
+        Condition:
+          Any:
+          - Type: AlwaysTrue
+            Name: AlwaysTrue
+      StartCondition:
+        All:
+        - Type: SimulationTime
+          Name: After 60 sec
+          Keep: True
+          Rule: GreaterThan
+          Value: 60
+  EndCondition:
+    Success:
+      All:
+      - Type: ReachPosition
+        Name: Keep flag works fine?
+        Keep: True
+        Trigger: ego-vehicle
+        Pose: *ego-vehicle-initial-pose
+        Tolerance: 0.5
+      - Type: SimulationTime
+        Name: Suddenly!
+        Keep: True
+        Rule: GreaterThan
+        Value: ${{ $x + $y + $z }}
+      - Type: ReachPosition
+        Name: EgoReachGoal
+        Keep: True
+        Trigger: ego-vehicle
+        Pose: *ego-vehicle-goal-pose
+        Tolerance : 0.5
+      - Type: Signal
+        Name: Signal is green?
+        Keep: True
+        Trigger: intersection-1
+        State: Experimental-Go
+      - Type: Acceleration
+        Name: If engine stopped.
+        Keep: True
+        Trigger: ego-vehicle
+        Rule: LessEqual
+        Value: 0
+    Failure:
+      Any:
+      - Type: SimulationTime
+        Name: The time limit 120 sec is over.
+        Keep: True
+        Rule: GreaterThan
+        Value: 120
+      - Type: CollisionByEntity
+        Name: Traffic accident with vehicle.
+        Keep: True
+        Trigger: ego-vehicle
+        TargetEntity: vehicle-1
+      # - Type: CollisionByEntity
+      #   Name: Traffic accident with bicycle.
+      #   Keep: True
+      #   Trigger: ego-vehicle
+      #   TargetEntity: bicycle-1
+      - Type: RelativeDistance
+        Name: Ego-vehicle is too close to vehicle-1.
+        Keep: True
+        Trigger: ego-vehicle
+        TargetEntity: vehicle-1
+        Rule: LessThan
+        Value: 0.5
+      - Type: RelativeDistance
+        Name: Vehicle-1 is too close to ego-vehicle.
+        Keep: True
+        Trigger: vehicle-1
+        TargetEntity: ego-vehicle
+        Rule: LessThan
+        Value: 0.5
+      # - Type: RelativeDistance
+      #   Name: Vehicle-1 is too close to bicycle-1
+      #   Keep: True
+      #   Trigger: vehicle-1
+      #   TargetEntity: bicycle-1
+      #   Rule: LessThan
+      #   Value: 1
+

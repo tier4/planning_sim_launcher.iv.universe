@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<package format="2">
+  <name>planning_simulator_launcher</name>
+  <version>0.0.0</version>
+  <description>The planning_simulator_launcher package</description>
+
+  <maintainer email="masaya.kataoka@tier4.jp">Masaya Kataoka</maintainer>
+  <maintainer email="tomoya.kimura@tier4.jp">Tomoya Kimura</maintainer>
+  <maintainer email="httperror@404-notfound.jp">Tatsuya Yamasaki</maintainer>
+
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+</package>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Parameters for Planning Simulator -->
+  <arg name="map_path"/>
+  <arg name="sensor_model"/>
+  <arg name="vehicle_model"/>
+  <arg name="rviz" default="true"/>
+  <arg name="use_object_recognition" default="true"/>
+
+  <!-- Parameters for Scenario Runner -->
+  <arg name="log_output_dir"/>
+  <arg name="scenario_id"/>
+  <arg name="scenario_path"/>
+  <arg name="scenario_runner_output" default="screen"/>
+
+  <!-- Simulation Clock -->
+  <arg name="use_sim_time" default="false"/>
+  <param name="/use_sim_time" value="$(arg use_sim_time)"/>
+
+  <!-- Planning Simulator -->
+  <include file="$(find autoware_launch)/launch/planning_simulator.launch">
+    <!-- planning_simulator.launch's essential parameters -->
+    <arg name="map_path" value="$(arg map_path)"/>
+    <arg name="sensor_model" value="$(arg sensor_model)"/>
+    <arg name="vehicle_model" value="$(arg vehicle_model)"/>
+
+    <!-- planning_simulator.launch's optional parameters -->
+    <arg name="rviz" value="$(arg rviz)"/>
+    <arg name="rviz_args" value="-d $(find scenario_api)/rviz/planning_simulator.rviz"/>
+
+    <!-- simple_planning_simulator.launch's optional parameters -->
+    <arg name="initial_engage_state" value="false"/>
+
+    <!-- dummy_perception_publisher.launch's optional parameters -->
+    <arg name="perception/enable_detection_failure" value="false" />
+    <arg name="perception/enable_object_recognition" value="$(arg use_object_recognition)" />
+    <arg name="sensing/visible_range" value="1000" />
+  </include>
+
+  <include file="$(find npc_simulator)/launch/npc_simulator.launch">
+    <arg name="initial_engage_state" value="false"/>
+  </include>
+
+  <!-- Scenario Runner -->
+  <node pkg="scenario_runner" type="scenario_runner_node" name="scenario_runner_node" output="$(arg scenario_runner_output)">
+    <param name="camera_frame_id" value="camera5/camera_optical_link"/> <!-- base link of front camera -->
+    <param name="log_output_path" value="$(arg log_output_dir)/$(arg scenario_id).json"/>
+    <param name="scenario_id" value="$(arg scenario_id)"/>
+    <param name="scenario_path" value="$(arg scenario_path)"/>
+    <remap from="~input/autoware_state" to="/autoware/state"/>
+    <remap from="~input/pointcloud" to="/sensing/lidar/no_ground/pointcloud"/>
+    <remap from="~input/route" to="/planning/mission_planning/route"/>
+    <remap from="~input/signal_command" to="/vehicle/status/turn_signal"/>
+    <remap from="~input/vectormap" to="/map/vector_map"/>
+    <remap from="~input/vehicle_twist" to="/vehicle/status/twist"/>
+    <remap from="~output/autoware_engage" to="/autoware/engage"/>
+    <remap from="~output/check_point" to="/planning/mission_planning/checkpoint"/>
+    <remap from="~output/goal_point" to="/planning/mission_planning/goal"/>
+    <remap from="~output/initial_velocity" to="/initialtwist"/>
+    <remap from="~output/lane_change_permission" to="/planning/scenario_planning/lane_driving/lane_change_approval"/>
+    <remap from="~output/limit_velocity" to="/planning/scenario_planning/max_velocity"/>
+    <remap from="~output/npc_simulator_engage" to="/simulation/npc_simulator/engage"/>
+    <remap from="~output/object_info" to="/simulation/npc_simulator/object_info"/>
+    <remap from="~output/simulator_engage" to="/vehicle/engage"/>
+    <remap from="~output/start_point" to="/initialpose"/>
+    <remap from="~output/traffic_detection_result" to="/perception/traffic_light_recognition/traffic_light_states"/>
+    <remap from="~rosparam/add_simulator_noise" to="/simple_planning_simulator/add_measurement_noise"/> <!-- rosparam: add simulator noise or not -->
+    <remap from="~rosparam/max_velocity" to="/planning/scenario_planning/motion_velocity_optimizer/max_velocity"/> <!-- rosparam: max velocity -->
+    <remap from="~rosparam/simulator_pos_noise" to="/simple_planning_simulator/pos_noise_stddev"/> <!-- rosparam: std of simulator pos noise -->
+  </node>
+
+  <!-- Recording -->
+  <node pkg="rosbag" type="record" name="rosbag_recorder" output="screen" respawn="false" respawn_delay="0" args="record --lz4 -a -O $(arg log_output_dir)/$(arg scenario_id).bag"/>
+</launch>
