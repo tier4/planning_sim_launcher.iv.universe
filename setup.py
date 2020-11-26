@@ -41,7 +41,7 @@ setup(
     entry_points={
         'console_scripts': [
             'launch_main = planning_simulator_launcher.launch:main',
-            'show_result_main = planning_simulator_launcher.show_result',
+            'show_result_main = planning_simulator_launcher.show_result:main',
         ],
     },
 )
