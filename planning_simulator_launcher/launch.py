@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from scenario_loader import ScenarioLoader
-from scenario_parser import ScenarioParser
+from planning_simulator_launcher.scenario_loader import ScenarioLoader
+from planning_simulator_launcher.scenario_parser import ScenarioParser
 import argparse
 import json
 import os

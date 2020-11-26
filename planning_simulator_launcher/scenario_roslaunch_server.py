@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from os.path import join, dirname
-from scenario_parser import ScenarioParser
+from planning_simulator_launcher.scenario_parser import ScenarioParser
 import SimpleXMLRPCServer as xmlrpc_server
 import json
 import os
