@@ -1,207 +1,177 @@
-#!/usr/bin/env python
-
-from planning_simulator_launcher.scenario_loader import ScenarioLoader
-from planning_simulator_launcher.scenario_parser import ScenarioParser
 import argparse
 import json
-import os
-import roslaunch
-import sys
-import time
-import xmlrpclib
+from pathlib import Path
+from typing import Optional, Union
+
+import launch
+from planning_simulator_launcher.launch_script import launch_description
+from planning_simulator_launcher.scenario_parser import ScenarioParser
+
+
+# If a base dir is given, resolves relative paths relative to the base dir.
+# Otherwise, ensures that the path is absolute.
+def absolute_path(path: Union[Path, str], base_dir: Optional[Path] = None):
+    path = Path(path)
+    if path.is_absolute():
+        return path.resolve()
+    if base_dir:
+        return (base_dir / path).resolve()
+    raise ValueError(f"Relative path '{path}' is not allowed.")
+
+
+class Database:
+    def __init__(
+        self,
+        database_path: Path,
+        *,
+        base_dir: Optional[Path] = None
+    ):
+        print('Loading Database')
+        print(f'    Opening \x1b[36m{database_path}\x1b[0m => ', end='')
+        with database_path.open() as file:
+            database = json.load(file)
+            print('\x1b[32mSuccess\x1b[0m')
+
+        print('    Validating => ', end='')
+        self.launch_path = absolute_path(database['launch_path'], base_dir)
+        # Check if it exists, because the error message if we try to access it
+        # later is not helpful.
+        if not self.launch_path.is_file():
+            raise ValueError(f"launch_path '{self.launch_path}' is not a file")
+
+        self.log_output_base_dir = absolute_path(database['log_output_base_dir'], base_dir)
+
+        self.map = {name: absolute_path(path, base_dir) for name, path in database['map'].items()}
+        for path in self.map.values():
+            if not path.is_file():
+                raise ValueError(f"map '{path}' is not a file")
+
+        self.scenario = [absolute_path(path, base_dir) for path in database['scenario']]
+        for path in self.scenario:
+            if not path.is_file():
+                raise ValueError(f"scenario '{path}' is not a file")
+        print('\x1b[32mSuccess\x1b[0m')
 
 
 class Launcher:
+    def __init__(self, args):
+        # Only created for validation, doesn't need to be stored
+        database = Database(args.database)
 
-    def __init__(self, args, loader):
+        # Only use database if command line arg is None
+        self.launch_path = args.launch_path or database.launch_path
+        self.log_output_base_dir = args.log_output_base_dir or database.log_output_base_dir
+        # Similar, but wrap it in a list
+        self.scenarios = [args.scenario] if args.scenario else database.scenario
+        self.map = database.map
         self.timeout = args.timeout
         self.log_output_type = args.log_output
-        self.server = None
-        self.client = xmlrpclib.ServerProxy('http://0.0.0.0:10000')
-        self.loader = loader
-        self.args = args
+        self.vehicle_model = args.vehicle_model
+        self.sensor_model = args.sensor_model
 
-        print('Loading Databse')
+    # Look up the map name in the scenario in scenario_database.json
+    def map_path(self, parser: ScenarioParser) -> Path:
+        scenario_map_path = parser.getMapPath()
+        print(f'    Loading map \x1b[36m{scenario_map_path}\x1b[0m as ',
+              end='')
 
-        self.json_path = args.database
-        sys.stdout.write('    Opening  \x1b[36m')
-        sys.stdout.write(self.json_path)
-        sys.stdout.write('\x1b[0m => ')
+        # If the key is not found, return the key itself
+        map_path = self.map.get(
+            parser.getMapPath(),
+            parser.getMapPath()
+        )
 
-        with open(self.json_path) as file:
-            print('\x1b[32mSuccess\x1b[0m')
-            self.database = json.load(file)
-
-    def map_path(self):
-        sys.stdout.write('    load map \x1b[36m')
-        sys.stdout.write(self.parser.getMapPath())
-        sys.stdout.write('\x1b[0m as ')
-
-        map_path = self.database['map'].get(
-                self.parser.getMapPath(),
-                self.parser.getMapPath());
-
-        if map_path == self.parser.getMapPath():
+        if map_path == parser.getMapPath():
             print('is')
         else:
-            sys.stdout.write('\x1b[36m')
-            sys.stdout.write(map_path)
-            print('\x1b[0m')
+            print(f'\x1b[36m{map_path}\x1b[0m')
 
-        return self.loader.absolute(map_path)
+        return absolute_path(map_path)
 
-    def launch_path(self):
-        sys.stdout.write('    via \x1b[36m')
+    def run_all_scenarios(self):
+        # This allows running launch files from this script
+        ls = launch.LaunchService()
 
-        path = None
+        if not self.log_output_base_dir.is_dir():
+            self.log_output_base_dir.mkdir(parents=True)
 
-        if self.args.launch:
-            path = os.path.abspath(self.args.launch)
-        else:
-            path = self.loader.absolute(self.database["launch_path"])
-
-        sys.stdout.write(path)
-        print('\x1b[0m')
-        return path
-
-    def start(self, scenario_path):
-        if self.args.log_output_base_dir:
-            log_output_base_dir = os.path.abspath(self.args.log_output_base_dir)
-        else:
-            log_output_base_dir = self.loader.absolute(self.database["log_output_base_dir"])
-
-        if not os.path.exists(log_output_base_dir):
-            os.makedirs(log_output_base_dir)
-
-        self.client.start(
-            self.launch_path(),
-            scenario_path,
-            self.parser.getScenarioId(),
-            self.map_path(),
-            log_output_base_dir,
-            self.log_output_type)
-
-    def terminate(self):
-        self.client.terminate(1)
-
-    def waitUntilSimulationFinished(self):
-        start = time.time()
-
-        print('    The simulation is forced to terminate after'),
-        print(str(self.timeout)),
-        print('seconds.')
-
-        while self.client.simulationRunnig() and (time.time() - start) < self.timeout:
-            time.sleep(1)
-
-        if self.client.simulationRunnig():
-            print('    The specified maximum simulation time (option --timeout) has been reached.')
-            print('    Terminate simulation.')
-            print('    The scenario is likely to be in a deadlock.')
-            self.terminate()
-
-    def write_result(self, path, uuid):
-        result = {}
-
-        result['code']     = self.client.status()
-        result['duration'] = self.client.current_duration()
-        result['mileage']  = self.client.current_mileage()
-
-        if self.client.status() == 0: # boost::exit_success
-            result['message'] = 'exit_success'
-            print('    \x1b[1;32m=> Success\x1b[0m')
-
-        elif self.client.status() == 201: # boost::exit_test_failure
-            result['message'] = 'exit_test_failure'
-            print('    \x1b[1;31m=> Failure\x1b[0m')
-
-        elif self.client.status() == 1: # boost::exit_failure
-            result['message'] = 'exit_failure'
-            print('    \x1b[1;31m=> Aborted\x1b[0m')
-
-        elif self.client.status() == 200: # boost::exit_exception_failure
-            result['message'] = 'exit_exception_failure'
-            print('    \x1b[1;31m=> Invalid\x1b[0m')
-
-        else:
-            result['message'] = 'scenario_runner broken'
-            sys.stdout.write('    \x1b[1;33m=> Broken (')
-            sys.stdout.write(str(self.client.status()))
-            print(')\x1b[0m')
-
-        if self.args.log_output_base_dir:
-            log_output_base_dir = os.path.abspath(self.args.log_output_base_dir)
-        else:
-            log_output_base_dir = self.loader.absolute(self.database["log_output_base_dir"])
-
-        if not os.path.exists(log_output_base_dir):
-            os.makedirs(log_output_base_dir)
-
-        result_path = os.path.join(log_output_base_dir, 'result-of-' + uuid + '.json')
-
-        with open(result_path, 'w') as file:
-            json.dump(result, file, indent=2, ensure_ascii=False, sort_keys=True, separators=(',', ': '))
-
-    def run_all_scenario(self):
-        if self.args.scenario:
-            scenarios = [ os.path.abspath(self.args.scenario) ]
-        else:
-            scenarios = self.database["scenario"]
-
-        for scenario in scenarios:
-            scenario_path = self.loader.absolute(scenario)
-
-            print('')
-            print('Running scenario \x1b[36m' + os.path.relpath(scenario_path) + '\x1b[0m')
-
+        for scenario_path in self.scenarios:
+            print(f'\nRunning scenario \x1b[36m{scenario_path}\x1b[0m')
             print('    Parameters')
-            self.parser = ScenarioParser(scenario_path, generate_mode=True)
+            parser = ScenarioParser(str(scenario_path), generate_mode=True)
 
-            n = 0
+            n_total = len(parser.scenario_files_path)
+            for n, scenario_path in enumerate(parser.scenario_files_path, start=1):
+                scenario_path = Path(scenario_path)
+                print(f'\nLaunch {n} of {n_total}')
+                print(f'    Scenario \x1b[36m{scenario_path}\x1b[0m')
 
-            for path in self.parser.scenario_files_path:
-                n = n + 1
+                scenario_id = parser.getScenarioId()
+                scenario_runner_args = {
+                    'scenario_id': scenario_id,
+                    'scenario_path': str(scenario_path),
+                    'log_output_path': f'{self.log_output_base_dir}/{scenario_id}.json',
+                    'json_dump_path': f'{self.log_output_base_dir}/result-of-{scenario_path.stem}.json',
+                    'camera_frame_id': 'camera5/camera_optical_link',
+                    'initial_engage_state': False
+                }
+                included_launch_file_args = {
+                    'map_path': self.map_path(parser),
+                    'log_dir': str(self.log_output_base_dir),
+                    'sensor_model': self.sensor_model,
+                    'vehicle_model': self.vehicle_model,
+                    'initial_engage_state': False,
+                }
+                ld = launch_description(
+                    launch_path=str(self.launch_path),
+                    vehicle_model=self.vehicle_model,
+                    scenario_runner_args=scenario_runner_args,
+                    included_launch_file_args=included_launch_file_args
+                )
+                ls.include_launch_description(ld)
+                ls.run()
+                ls.shutdown()
 
-                print('')
-                print('Launch ' + str(n) + ' of ' + str(len(self.parser.scenario_files_path)))
 
-                print('    scenario \x1b[36m' + path + '\x1b[0m')
+def main():
+    parser = argparse.ArgumentParser(description='launch simulator')
+    parser.add_argument(
+        '--timeout', type=int, default=180,
+        help='Simulation time limit in seconds. The default is 180 seconds.')
+    parser.add_argument(
+        '--database',
+        type=Path,
+        required=True,
+        help='Path to your scenario_database.json.')
+    parser.add_argument(
+        '--launch-path',
+        type=absolute_path,
+        help='Path to your launch file [overrides the value from scenario_database.json]')
+    parser.add_argument(
+        '--log-output',
+        choices=['screen', 'log', 'both', 'own_log', 'full'],
+        default='screen',
+        help='Specify the type of log output.')
+    parser.add_argument(
+        '--log-output-base-dir',
+        type=absolute_path,
+        help='Log directory [overrides the value from scenario_database.json]')
+    parser.add_argument(
+        '--scenario',
+        help='Scenario path [overrides the value from scenario_database.json]')
+    parser.add_argument(
+        '--vehicle_model',
+        default='lexus',
+        help='Vehicle model')
+    parser.add_argument(
+        '--sensor_model',
+        default='aip_xx1',
+        help='Sensor model')
+    args = parser.parse_args()
 
-                self.start(path)
-
-                self.waitUntilSimulationFinished()
-
-                self.write_result(
-                        scenario_path,
-                        os.path.splitext(os.path.basename(path))[0])
+    launcher = Launcher(args)
+    launcher.run_all_scenarios()
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='launch simulator')
-
-    parser.add_argument('--timeout', type=int, default=180,
-            help='Specify simulation time limit in seconds. \
-                  The default is 180 seconds.')
-
-    loader = ScenarioLoader()
-
-    parser.add_argument('--database',
-            default=os.path.relpath(loader.default_scenario_database_pathname),
-            help='Specify relative path to your scenario_database.json.')
-
-    parser.add_argument('--launch',
-            help='Specify relative path to your launch file.')
-
-    parser.add_argument('--log-output', default='screen',
-            help='Specify the type of log output.')
-
-    parser.add_argument('--log-output-base-dir',
-            help='Specify the directory log output to.')
-
-    parser.add_argument('--scenario',
-            help='Specify the scenario you want to execute.')
-
-    args = parser.parse_args()
-
-    launcher = Launcher(args, loader)
-    launcher.run_all_scenario()
+    main()
