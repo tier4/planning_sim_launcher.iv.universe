@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from scenario_generator import ScenarioGenerator
-from scenario_parameter import ScenarioParameter
+from planning_simulator_launcher.scenario_generator import ScenarioGenerator
+from planning_simulator_launcher.scenario_parameter import ScenarioParameter
 import os
 import yaml
 

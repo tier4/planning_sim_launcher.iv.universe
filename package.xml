@@ -1,7 +1,8 @@
-<?xml version="1.0" ?>
-<package format="2">
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>planning_simulator_launcher</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>The planning_simulator_launcher package</description>
 
   <maintainer email="masaya.kataoka@tier4.jp">Masaya Kataoka</maintainer>
@@ -9,8 +10,9 @@
   <maintainer email="httperror@404-notfound.jp">Tatsuya Yamasaki</maintainer>
 
   <license>Apache 2</license>
+  <exec_depend>scenario_runner</exec_depend>
 
-  <buildtool_depend>catkin</buildtool_depend>
-
-  <depend>rospy</depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
 </package>
