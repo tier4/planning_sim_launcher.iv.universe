@@ -1,3 +1,4 @@
+import os
 import yaml
 
 from planning_simulator_launcher.scenario_generator import ScenarioGenerator

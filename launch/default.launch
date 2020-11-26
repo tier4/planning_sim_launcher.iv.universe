@@ -5,10 +5,7 @@
   <arg name="vehicle_model" default="lexus"/> <!-- PROJECT REPOSITORY EDIT HERE! -->
   <arg name="rviz" default="true"/>
 
-  <arg name="log_output_dir"/>
-  <arg name="scenario_id"/>
-  <arg name="scenario_path"/>
-  <arg name="scenario_runner_output" default="screen"/>
-
-  <include file="$(find planning_simulator_launcher)/launch/scenario_launcher.launch" pass_all_args="true"/>
+  <include file="$(find-pkg-share planning_simulator_launcher)/launch/scenario_launcher.launch" pass_all_args="true">
+  	<param from="$eval($(find-pkg-share($var(vehicle_model) + '_description')+'/config/vehicle_info.yaml" />
+  </include>
 </launch>

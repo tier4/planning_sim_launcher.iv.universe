@@ -61,10 +61,7 @@ class ScenarioGenerator:
         print('    Parameters')
 
         for variable, configuration in self.params.items():
-            print('       '),
-            print(variable),
-            print('='),
-            print(configuration.values)
+            print(f'        {variable} = {configuration.values}'),
 
         generate_logs = []
 
@@ -90,10 +87,7 @@ class ScenarioGenerator:
                 result = deepcopy(self.yaml_str)
 
                 for variable, value in bindings:
-                    print('       '),
-                    print(variable),
-                    print('=>'),
-                    print(value)
+                    print(f'        {variable} => {value}'),
                     result = result.replace(variable, str(value))
 
                 # NOTE: Expand macro after variable assignment (to use variable in expression)
@@ -154,11 +148,7 @@ class ScenarioGenerator:
 
     def _update_default_params(self, name, yaml_string):
         for variable in self._getDefaultValueKeys(name):
-            print('       '),
-            print(variable),
-            print('=>'),
-            print(str(self.params[variable].default_value)),
-            print('(default)')
+            print(f'        {variable} => {self.params[variable].default_value} (default)'),
             yaml_string = yaml_string.replace(
                     variable, str(self.params[variable].default_value))
 
