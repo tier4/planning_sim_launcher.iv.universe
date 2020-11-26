@@ -31,8 +31,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'launch.py = planning_simulator_launcher.launch:main',
-            'show_result.py = planning_simulator_launcher.show_result:main',
+            'launch_main = planning_simulator_launcher.launch:main',
+            'show_result_main = planning_simulator_launcher.show_result:main',
         ],
     },
 )

@@ -126,7 +126,7 @@ class Viewer:
         return scenario_succeded
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description='Show result')
     parser.add_argument('scenario_generated_path', type=str, help='path of the generated scenario')
     parser.add_argument('log_path', type=str,help='path of the log')
@@ -135,3 +135,6 @@ if __name__ == "__main__":
     parser.add_argument('--output',type=str,help='output path of the result(if not set, only output result to the screen)')
     args = parser.parse_args()
     viwer = Viewer(args.scenario_generated_path,args.log_path,args.verbose,args.quiet,args.output)
+
+if __name__ == "__main__":
+    main()
