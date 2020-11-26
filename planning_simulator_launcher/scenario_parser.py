@@ -1,9 +1,7 @@
-#!/usr/bin/env python
+import yaml
 
 from planning_simulator_launcher.scenario_generator import ScenarioGenerator
 from planning_simulator_launcher.scenario_parameter import ScenarioParameter
-import os
-import yaml
 
 
 class ScenarioParser:
@@ -50,7 +48,3 @@ class ScenarioParser:
             return False
 
         return True
-
-
-if __name__ == "__main__":
-    pass

@@ -1,14 +1,10 @@
-#!/usr/bin/env python
-
-from copy import deepcopy
-import datetime
 import itertools
 import json
-import math
 import os
 import re
-import shutil
 import uuid
+from copy import deepcopy
+
 import yaml
 
 
@@ -36,30 +32,30 @@ class ScenarioGenerator:
         with open(path, "r+") as file:
             self.yaml_str = file.read()
 
-        self.__yaml_generate_dir = self.generated_directory + "/" + scenario_name + "/"
+        self._yaml_generate_dir = self.generated_directory + "/" + scenario_name + "/"
 
-        if os.path.exists(self.__yaml_generate_dir):
+        if os.path.exists(self._yaml_generate_dir):
             print('')
-            print('Cleanup target directory ' + os.path.relpath(self.__yaml_generate_dir))
+            print('Cleanup target directory ' + os.path.relpath(self._yaml_generate_dir))
 
-            for each in os.listdir(self.__yaml_generate_dir):
+            for each in os.listdir(self._yaml_generate_dir):
                 print('    Removing ' + each)
-                os.remove(os.path.join(self.__yaml_generate_dir, each))
+                os.remove(os.path.join(self._yaml_generate_dir, each))
         else:
-            os.makedirs(self.__yaml_generate_dir)
+            os.makedirs(self._yaml_generate_dir)
 
         print('')
         print("Generating scenario " + scenario_name)
-        self.__generate()
+        self._generate()
 
     def __del__(self):
         self.generate_log.close()
 
     def getScenarioFilesPath(self):
-        return self.__yaml_files_path
+        return self._yaml_files_path
 
-    def __generate(self):
-        self.__yaml_files_path = []
+    def _generate(self):
+        self._yaml_files_path = []
         self.num_scenarios = 0
 
         print('    Parameters')
@@ -86,8 +82,8 @@ class ScenarioGenerator:
             for bindings in itertools.product(*list_of_list_of_bindings):
                 scenario_id = str(uuid.uuid4())
 
-                yaml_path = self.__yaml_generate_dir + scenario_id + ".yaml"
-                self.__yaml_files_path.append(yaml_path)
+                yaml_path = self._yaml_generate_dir + scenario_id + ".yaml"
+                self._yaml_files_path.append(yaml_path)
                 print('')
                 print('    ' + os.path.relpath(yaml_path))
 
@@ -122,8 +118,8 @@ class ScenarioGenerator:
         else:
             scenario_id = str(uuid.uuid4())
 
-            yaml_path = self.__yaml_generate_dir + scenario_id + ".yaml"
-            self.__yaml_files_path.append(yaml_path)
+            yaml_path = self._yaml_generate_dir + scenario_id + ".yaml"
+            self._yaml_files_path.append(yaml_path)
             print('    ' + os.path.relpath(yaml_path))
 
             result = deepcopy(self.yaml_str)
@@ -143,7 +139,7 @@ class ScenarioGenerator:
 
         json.dump(generate_logs, self.generate_log)
 
-    def __getDefaultValueKeys(self, used_key):
+    def _getDefaultValueKeys(self, used_key):
         variables = []
 
         for variable in self.params.keys():
@@ -156,8 +152,8 @@ class ScenarioGenerator:
 
         return variables
 
-    def __update_default_params(self, name, yaml_string):
-        for variable in self.__getDefaultValueKeys(name):
+    def _update_default_params(self, name, yaml_string):
+        for variable in self._getDefaultValueKeys(name):
             print('       '),
             print(variable),
             print('=>'),
@@ -169,8 +165,8 @@ class ScenarioGenerator:
         return yaml_string
 
     def evaluate(self, match):
-        pi = math.pi
         return match.group(1) + str(eval(match.group(2))) + match.group(3)
 
     def macroexpand(self, source):
-        return re.sub(r"^(.*)\${{\s+((?:pi|[\d\s+\-\*/%\(\).])*)\s+}}(.*)$", self.evaluate, source, flags=re.M)
+        regex = r"^(.*)\${{\s+((?:pi|[\d\s+\-\*/%\(\).])*)\s+}}(.*)$"
+        return re.sub(regex, self.evaluate, source, flags=re.M)
