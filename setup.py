@@ -1,5 +1,6 @@
-from setuptools import setup
 from glob import glob
+
+from setuptools import setup
 
 package_name = 'planning_simulator_launcher'
 
@@ -13,7 +14,15 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', glob('launch/*')),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'launch',
+        'launch_ros',
+        'launch_xml',
+        'numpy',
+        'pyyaml',
+        'setuptools',
+        'termcolor',
+    ],
     zip_safe=True,
     author='Masaya Kataoka, Tomoya Kimura, Tatsuya Yamasaki',
     author_email='masaya.kataoka@tier4.jp, tomoya.kimura@tier4.jp, httperror@404-notfound.jp',
