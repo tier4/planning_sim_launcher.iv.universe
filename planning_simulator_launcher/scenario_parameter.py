@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import numpy as np
 
 
@@ -17,29 +15,29 @@ class ScenarioParameter:
             return
 
         if 'Min' in yaml:
-            self.__min = yaml['Min']
+            self._min = yaml['Min']
         elif 'Value' in yaml:
-            self.__min = yaml['Value']
+            self._min = yaml['Value']
         else:
-            self.__min = 0
+            self._min = 0
 
-        print('        Min: ' + str(self.__min))
+        print('        Min: ' + str(self._min))
 
         if 'Max' in yaml:
-            self.__max = yaml['Max']
+            self._max = yaml['Max']
         else:
-            self.__max = self.__min
+            self._max = self._min
 
-        print('        Max: ' + str(self.__max))
+        print('        Max: ' + str(self._max))
 
         if 'NumDivisions' in yaml:
-            self.__num_divisions = yaml['NumDivisions']
+            self._num_divisions = yaml['NumDivisions']
         else:
-            self.__num_divisions = 1
+            self._num_divisions = 1
 
-        print('        NumDivisions: ' + str(self.__num_divisions))
+        print('        NumDivisions: ' + str(self._num_divisions))
 
-        self.values = np.linspace(self.__min, self.__max, self.__num_divisions)
+        self.values = np.linspace(self._min, self._max, self._num_divisions)
         # print('        Values:'),
         # print(self.values)
 

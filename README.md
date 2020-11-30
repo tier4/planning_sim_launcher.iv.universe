@@ -28,7 +28,7 @@ See [https://github.com/tier4/AutowareArchitectureProposal#how-to-setup](https:/
 
 ## 2. Usage
 
- (2020/07/01 last modified)
+ (2020/11/23 last modified)
 
 ### 2.1 Get Sample Scenario
 
@@ -66,22 +66,12 @@ Note that the Map path must be rewritten when sharing a scenario with multiple u
 
 #### (3) Execute
 
-##### (a) Terminal A
 
 ``` shell
-source /opt/ros/melodic/setup.bash
+source /opt/ros/foxy/setup.bash
 source /path/to/AutowareArchitectureProposal/install/setup.bash
 
-rosrun planning_simulator_launcher scenario_roslaunch_server.py
-```
-
-#### (b) Terminal B
-
-``` shell
-source /opt/ros/melodic/setup.bash
-source /path/to/AutowareArchitectureProposal/install/setup.bash
-
-rosrun planning_simulator_launcher launch.py --timeout=180 && rosrun planning_simulator_launcher show_result.py ./scenario/generated ./scenario/log
+ros2 run planning_simulator_launcher launch.py --timeout=180 && ros2 run planning_simulator_launcher show_result.py ./scenario/generated ./scenario/log
 ```
 Command-line arguments of script `python show_result.py` is depends on the path you written in `scenario_database.json`.
 1st argument is path to your directory your scenarios placed on + `/generated`.

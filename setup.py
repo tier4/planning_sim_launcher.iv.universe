@@ -6,7 +6,7 @@ package_name = 'planning_simulator_launcher'
 
 setup(
     name=package_name,
-    version='0.0.1',
+    version='0.0.0',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -41,7 +41,7 @@ setup(
     entry_points={
         'console_scripts': [
             'launch_main = planning_simulator_launcher.launch:main',
-            'show_result_main = planning_simulator_launcher.show_result:main',
+            'show_result_main = planning_simulator_launcher.show_result',
         ],
     },
 )
