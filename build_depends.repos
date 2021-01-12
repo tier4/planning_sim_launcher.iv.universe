@@ -1,0 +1,5 @@
+repositories:
+  simulator/scenario_runner:
+    type: git
+    url: https://github.com/tier4/scenario_runner.iv.universe.git
+    version: ros2
