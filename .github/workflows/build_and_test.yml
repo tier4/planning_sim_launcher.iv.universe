@@ -14,11 +14,13 @@ jobs:
     steps:
     - name: Check out repo
       uses: actions/checkout@v2
+      with:
+        path: 'planning_simulator_launcher'
 
     - name: Clone dependency packages
       run: |
         mkdir dependency_ws
-        vcs import dependency_ws < build_depends.repos
+        vcs import dependency_ws < planning_simulator_launcher/build_depends.repos
 
     - name: Upgrade ros packages
       run: |
@@ -26,10 +28,10 @@ jobs:
         apt upgrade -y
 
     - name: Install missing dependencies
-      run: rosdep update && DEBIAN_FRONTEND=noninteractive sudo rosdep install --from-paths . --ignore-src --rosdistro foxy -y
+      run: rosdep update && DEBIAN_FRONTEND=noninteractive rosdep install planning_simulator_launcher --from-paths . --ignore-src --rosdistro foxy -y
 
     - name: Build
-      run: . /opt/ros/foxy/setup.sh && colcon build --event-handlers console_cohesion+
+      run: . /opt/ros/foxy/setup.sh && colcon build --event-handlers console_cohesion+ --packages-up-to planning_simulator_launcher
 
     - name: Run tests
-      run: . /opt/ros/foxy/setup.sh && colcon test --event-handlers console_cohesion+
+      run: . /opt/ros/foxy/setup.sh && colcon test --event-handlers console_cohesion+ --packages-up-to planning_simulator_launcher
