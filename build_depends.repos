@@ -1,0 +1,42 @@
+repositories:
+  autoware/pilot.auto:
+    type: git
+    url: https://github.com/tier4/pilot.auto.git
+    version: ros2
+  autoware/planning_simulator:
+    type: git
+    url: https://github.com/tier4/planning_simulator.iv.universe.git
+    version: ros2
+  simulator/scenario_runner:
+    type: git
+    url: https://github.com/tier4/scenario_runner.iv.universe.git
+    version: ros2
+  description/vehicle/lexus_description:
+    type: git
+    url: https://github.com/tier4/lexus_description.iv.universe.git
+    version: ros2
+  vendor/rclcpp_generic:
+    type: git
+    url: https://github.com/ApexAI/rclcpp_generic.git
+    version: autoware
+  vendor/topic_tools:
+    type: git
+    url: https://github.com/ApexAI/topic_tools.git
+    version: autoware
+  # dependencies for autoware/pilot.auto
+  vendor/grid_map:
+    type: git
+    url: https://github.com/mitsudome-r/grid_map.git
+    version: ros2-fix-ci
+  vendor/perception_pcl:
+    type: git
+    url: https://github.com/ros-perception/perception_pcl.git
+    version: foxy-devel
+  vendor/rosbridge_suite:
+    type: git
+    url: https://github.com/RobotWebTools/rosbridge_suite.git
+    version: ros2
+  vendor/rosauth:
+    type: git
+    url: https://github.com/GT-RAIL/rosauth.git
+    version: ros2
