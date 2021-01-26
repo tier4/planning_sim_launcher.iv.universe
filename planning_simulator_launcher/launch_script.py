@@ -63,7 +63,7 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
         ]
     )
 
-    # kill other processes if scnario_runner has died
+    # shutdown other processes when scenario_runner has died
     shutdown_handler = launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
                 target_action=scenario_runner,
