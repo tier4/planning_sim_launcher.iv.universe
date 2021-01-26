@@ -11,6 +11,7 @@
 
   <license>Apache 2</license>
   <exec_depend>scenario_runner</exec_depend>
+  <exec_depend>autoware_launch</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>
