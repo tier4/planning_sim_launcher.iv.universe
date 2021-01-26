@@ -25,6 +25,7 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
         parameters=[
             scenario_runner_args,
             vehicle_info_param_path,
+            {'output': 'log'}
         ],
         remappings=[
             ("input/pointcloud", "/sensing/lidar/no_ground/pointcloud"),
@@ -49,6 +50,7 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
             ("output/dynamic_object_info" ,"/simulation/dummy_perception_publisher/object_info"),
             ("output/debug_object_info","/simulation/npc_simulator/ground_truth_object_info")
         ],
+        # prefix=['xterm -e']
         # sigterm_timeout=???, TODO
     )
 
