@@ -40,26 +40,22 @@ repositories:
     type: git
     url: https://github.com/mitsudome-r/grid_map.git
     version: ros2-fix-ci
-  vendor/tamagawa_imu_driver:
-    type: git
-    url: https://github.com/tier4/tamagawa_imu_driver.git
-    version: ros2
-  vendor/livox-driver:
-    type: git
-    url: https://github.com/fred-apex-ai/livox_ros2_driver.git
-    version: master
   vendor/perception_pcl:
     type: git
     url: https://github.com/ros-perception/perception_pcl.git
     version: foxy-devel
+  vendor/rclcpp_generic:
+    type: git
+    url: https://github.com/ApexAI/rclcpp_generic.git
+    version: autoware
+  vendor/topic_tools:
+    type: git
+    url: https://github.com/ApexAI/topic_tools.git
+    version: autoware
   vendor/rosbridge_suite:
     type: git
     url: https://github.com/RobotWebTools/rosbridge_suite.git
     version: ros2
-  vendor/usb_cam:
-    type: git
-    url: https://github.com/flynneva/usb_cam.git
-    version: foxy
   vendor/rosauth:
     type: git
     url: https://github.com/GT-RAIL/rosauth.git
