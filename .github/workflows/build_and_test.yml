@@ -27,6 +27,11 @@ jobs:
         apt update
         apt upgrade -y
 
+    - name: Clone dependency packages
+      run: |
+        mkdir dependency_ws
+        vcs import dependency_ws < build_depends.repos
+
     - name: Install missing dependencies
       run: rosdep update && DEBIAN_FRONTEND=noninteractive rosdep install planning_simulator_launcher --from-paths . --ignore-src --rosdistro foxy -y
 

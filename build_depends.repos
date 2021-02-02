@@ -6,6 +6,9 @@ repositories:
   autoware/planning_simulator:
     type: git
     url: https://github.com/tier4/planning_simulator.iv.universe.git
+  autoware/launcher:
+    type: git
+    url: https://github.com/tier4/autoware_launcher.iv.universe.git
     version: ros2
   simulator/scenario_runner:
     type: git
