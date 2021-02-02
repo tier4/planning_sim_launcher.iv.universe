@@ -58,7 +58,7 @@ repositories:
     version: ros2
   vendor/usb_cam:
     type: git
-    url: https://github.com/tier4/ublox.git
+    url: https://github.com/flynneva/usb_cam.git
     version: foxy
   vendor/rosauth:
     type: git
