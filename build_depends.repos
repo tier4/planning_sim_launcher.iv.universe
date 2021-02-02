@@ -35,7 +35,6 @@ repositories:
     type: git
     url: https://github.com/ApexAI/topic_tools.git
     version: autoware
-  # dependencies for autoware/pilot.auto
   vendor/grid_map:
     type: git
     url: https://github.com/mitsudome-r/grid_map.git
@@ -52,6 +51,10 @@ repositories:
     type: git
     url: https://github.com/tier4/tamagawa_imu_driver.git
     version: ros2
+  vendor/livox-driver:
+    type: git
+    url: https://github.com/fred-apex-ai/livox_ros2_driver.git
+    version: master
   vendor/topic_tools:
     type: git
     url: https://github.com/ApexAI/topic_tools.git
