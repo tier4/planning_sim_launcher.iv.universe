@@ -48,6 +48,10 @@ repositories:
     type: git
     url: https://github.com/ApexAI/rclcpp_generic.git
     version: autoware
+  vendor/tamagawa_imu_driver:
+    type: git
+    url: https://github.com/tier4/tamagawa_imu_driver.git
+    version: ros2
   vendor/topic_tools:
     type: git
     url: https://github.com/ApexAI/topic_tools.git
