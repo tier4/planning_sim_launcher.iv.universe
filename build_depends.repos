@@ -7,25 +7,13 @@ repositories:
     type: git
     url: https://github.com/tier4/planning_simulator.iv.universe.git
     version: ros2
-  autoware/launcher:
+  simulator/scenario_runner:
     type: git
-    url: https://github.com/tier4/autoware_launcher.iv.universe.git
-    version: ros2
-  description/sensor/velodyne_simulator:
-    type: git
-    url: https://github.com/tier4/velodyne_simulator.git
-    version: ros2
-  description/sensor/sensor_description:
-    type: git
-    url: https://github.com/tier4/sensor_description.iv.universe.git
+    url: https://github.com/tier4/scenario_runner.iv.universe.git
     version: ros2
   description/vehicle/lexus_description:
     type: git
     url: https://github.com/tier4/lexus_description.iv.universe.git
-    version: ros2
-  simulator/scenario_runner:
-    type: git
-    url: https://github.com/tier4/scenario_runner.iv.universe.git
     version: ros2
   vendor/rclcpp_generic:
     type: git
@@ -35,6 +23,7 @@ repositories:
     type: git
     url: https://github.com/ApexAI/topic_tools.git
     version: autoware
+  # dependencies for autoware/pilot.auto
   vendor/grid_map:
     type: git
     url: https://github.com/mitsudome-r/grid_map.git
@@ -43,30 +32,10 @@ repositories:
     type: git
     url: https://github.com/ros-perception/perception_pcl.git
     version: foxy-devel
-  vendor/rclcpp_generic:
-    type: git
-    url: https://github.com/ApexAI/rclcpp_generic.git
-    version: autoware
-  vendor/tamagawa_imu_driver:
-    type: git
-    url: https://github.com/tier4/tamagawa_imu_driver.git
-    version: ros2
-  vendor/livox-driver:
-    type: git
-    url: https://github.com/fred-apex-ai/livox_ros2_driver.git
-    version: master
-  vendor/topic_tools:
-    type: git
-    url: https://github.com/ApexAI/topic_tools.git
-    version: autoware
   vendor/rosbridge_suite:
     type: git
     url: https://github.com/RobotWebTools/rosbridge_suite.git
     version: ros2
-  vendor/usb_cam:
-    type: git
-    url: https://github.com/flynneva/usb_cam.git
-    version: foxy
   vendor/rosauth:
     type: git
     url: https://github.com/GT-RAIL/rosauth.git
