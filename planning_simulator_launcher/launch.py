@@ -1,9 +1,13 @@
 import argparse
+import os
+import time
 import json
 from pathlib import Path
 from typing import Optional, Union
 
+from launch_ros.substitutions import FindPackageShare
 import launch
+
 from planning_simulator_launcher.launch_script import launch_description
 from planning_simulator_launcher.scenario_parser import ScenarioParser
 
@@ -33,18 +37,21 @@ class Database:
             print('\x1b[32mSuccess\x1b[0m')
 
         print('    Validating => ', end='')
-        self.launch_path = absolute_path(database['launch_path'], base_dir)
+
+        autoware_launch_package_path = FindPackageShare("autoware_launch").find("autoware_launch")
+        autoware_launch_path = Path(autoware_launch_package_path) / 'launch' / 'planning_simulator.launch.xml'
+        self.launch_path = autoware_launch_path
+
+
         # Check if it exists, because the error message if we try to access it
         # later is not helpful.
         if not self.launch_path.is_file():
             raise ValueError(f"launch_path '{self.launch_path}' is not a file")
 
+        base_dir = ""
         self.log_output_base_dir = absolute_path(database['log_output_base_dir'], base_dir)
 
         self.map = {name: absolute_path(path, base_dir) for name, path in database['map'].items()}
-        for path in self.map.values():
-            if not path.is_file():
-                raise ValueError(f"map '{path}' is not a file")
 
         self.scenario = [absolute_path(path, base_dir) for path in database['scenario']]
         for path in self.scenario:
@@ -86,7 +93,7 @@ class Launcher:
         else:
             print(f'\x1b[36m{map_path}\x1b[0m')
 
-        return absolute_path(map_path)
+        return str(absolute_path(map_path))
 
     def run_all_scenarios(self):
         # This allows running launch files from this script
@@ -117,10 +124,8 @@ class Launcher:
                 }
                 included_launch_file_args = {
                     'map_path': self.map_path(parser),
-                    'log_dir': str(self.log_output_base_dir),
                     'sensor_model': self.sensor_model,
                     'vehicle_model': self.vehicle_model,
-                    'initial_engage_state': False,
                 }
                 ld = launch_description(
                     launch_path=str(self.launch_path),

@@ -47,16 +47,16 @@ cp scenario_database_template.json scenario_database.json
 #### (2) Edit `scenario_database.json`
 
 Example:
+
 ```
 {
-    "launch_path" : "../scenario_runner/scenario_runner/launch/scenario_runner.launch",
-    "log_output_base_dir" : "scenario/log/",
-    "map" : {
-        "kashiwanoha" : "/path/to/your/map/directory/kashiwanoha"
-    },
-    "scenario": [
-        "scenario/total_test.yaml"
-    ]
+  "log_output_base_dir": "$USER_HOME/AutowareArchitectureProposal/src/simulator/planning_simulator_launcher/scenario/log/",
+  "map": {
+    "odaiba": "$USER_HOME/AutonomousDrivingScenarios/map/odaiba"
+  },
+  "scenario": [
+    "$USER_HOME/AutonomousDrivingScenarios/odd2/scenario/UC-001-0002/PSim_1/UC-001-0002_PSim_1_case1.yaml"
+  ],
 }
 ```
 
