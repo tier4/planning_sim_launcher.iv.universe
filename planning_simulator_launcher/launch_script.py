@@ -17,7 +17,7 @@ import launch
 def launch_description(*, launch_path, vehicle_model, scenario_runner_args, included_launch_file_args):
     vehicle_package = f'{vehicle_model}_description'
     vehicle_package_path = FindPackageShare(vehicle_package).find(vehicle_package)
-    vehicle_info_param_path = Path(vehicle_package_path) / 'config' / 'vehicle_info.yaml'
+    vehicle_info_param_path = Path(vehicle_package_path) / 'config' / 'vehicle_info.param.yaml'
     initial_engage_state = 'True'
     scenario_runner = Node(
         package='scenario_runner',
