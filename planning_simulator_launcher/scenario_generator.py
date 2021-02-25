@@ -6,7 +6,7 @@ import uuid
 from copy import deepcopy
 
 import yaml
-
+from math import pi
 
 class ScenarioGenerator:
 
