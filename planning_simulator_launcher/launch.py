@@ -117,7 +117,7 @@ class Launcher:
                 scenario_runner_args = {
                     'scenario_id': scenario_id,
                     'scenario_path': str(scenario_path),
-                    'log_output_path': f'{self.log_output_base_dir}/{scenario_id}.json',
+                    'log_output_path': f'{self.log_output_base_dir}/{scenario_id}-log-of-{n}-th-test.json',
                     'json_dump_path': f'{self.log_output_base_dir}/result-of-{scenario_path.stem}.json',
                     'camera_frame_id': 'camera5/camera_optical_link',
                     'initial_engage_state': False
