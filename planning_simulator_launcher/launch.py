@@ -120,12 +120,12 @@ class Launcher:
                     'log_output_path': f'{self.log_output_base_dir}/{scenario_id}-log-of-{n}-th-test.json',
                     'json_dump_path': f'{self.log_output_base_dir}/result-of-{scenario_path.stem}.json',
                     'camera_frame_id': 'camera5/camera_optical_link',
-                    'initial_engage_state': False
                 }
                 included_launch_file_args = {
                     'map_path': self.map_path(parser),
                     'sensor_model': self.sensor_model,
                     'vehicle_model': self.vehicle_model,
+                    'initial_engage_state': "False",
                 }
                 ld = launch_description(
                     launch_path=str(self.launch_path),
