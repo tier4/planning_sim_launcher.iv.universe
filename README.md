@@ -135,9 +135,9 @@ This section contains information for developers.
 
 ## 5. Log file format
 
-The log file was outputed into the directory which you targeted in the scenario_database.json.
+The log file was outputted into the directory which you targeted in the scenario_database.json.
 Log file named as (scenario_id).json and (scenario_id).bag.
-(scenario_id).json contains infomation like below.
+(scenario_id).json contains information like below.
 move_distance is a move distance of the ego vehicle in the simulation.
 
 ```

@@ -35,7 +35,7 @@ all fields are required.
 2. Name : Name of the Condition  
 3. Pose : goal pose  
 4. Keep : if true, this condition always true when the Ego Vehicle leave the goal pose  
-5. Torelance : torelance of the goal pose 
+5. Tolerance : tolerance of the goal pose 
 
 ## CollisionByEntityCondition
 Check ego vehicle collide to the target entity or not
