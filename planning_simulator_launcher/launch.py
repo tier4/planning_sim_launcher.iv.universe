@@ -127,6 +127,7 @@ class Launcher:
                     'vehicle_model': self.vehicle_model,
                     'initial_engage_state': "False",
                     'perception/enable_detection_failure': "False",
+                    'sensing/visible_range': "1000.0",
                 }
                 ld = launch_description(
                     launch_path=str(self.launch_path),
