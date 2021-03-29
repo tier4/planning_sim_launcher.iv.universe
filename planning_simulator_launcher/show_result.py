@@ -44,7 +44,7 @@ class Viewer:
                 message = message + "NG \n"
             message = message + "id = " + data["id"] + "\n"
             message = message + "parent = " + data["parent"] + "\n"
-            message = message + "rosbg = " + data["rosbag"] + "\n"
+            message = message + "rosbag = " + data["rosbag"] + "\n"
             message = message + "json = " + data["json_log"] + "\n"
             metadata = data["metadata"]
             message = message + "start_datetime = " + metadata["start_datetime"] + "\n"
@@ -124,15 +124,15 @@ class Viewer:
 
     def getResult(self, id):
         logs = self.raw_data[id]["log"]
-        scenario_succeded = False
+        scenario_succeeded = False
         for log in logs:
             categories = log["categories"]
             if "endcondition" in categories:
                 if log["description"] == "simulation succeeded":
-                    scenario_succeded = True
+                    scenario_succeeded = True
                 else:
-                    scenario_succeded = False
-        return scenario_succeded
+                    scenario_succeeded = False
+        return scenario_succeeded
 
 
 def main():
