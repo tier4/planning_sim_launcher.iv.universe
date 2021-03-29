@@ -97,7 +97,6 @@ class Launcher:
 
     def run_all_scenarios(self):
         # This allows running launch files from this script
-        ls = launch.LaunchService()
 
         if not self.log_output_base_dir.is_dir():
             self.log_output_base_dir.mkdir(parents=True)
@@ -109,6 +108,7 @@ class Launcher:
 
             n_total = len(parser.scenario_files_path)
             for n, scenario_path in enumerate(parser.scenario_files_path, start=1):
+                ls = launch.LaunchService()
                 scenario_path = Path(scenario_path)
                 print(f'\nLaunch {n} of {n_total}')
                 print(f'    Scenario \x1b[36m{scenario_path}\x1b[0m')
