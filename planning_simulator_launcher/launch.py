@@ -130,6 +130,7 @@ class Launcher:
                     'json_dump_path': f'{self.log_output_base_dir}/result-of-{scenario_path.stem}.json',
                     'camera_frame_id': 'camera5/camera_optical_link',
                 }
+                
                 included_launch_file_args = {
                     'map_path': self.map_path(parser),
                     'sensor_model': self.sensor_model,
@@ -139,29 +140,16 @@ class Launcher:
                     'sensing/visible_range': "1000.0",
                 }
 
-                # remove None value
-                for k, v in list(included_launch_file_args.items()):
-                    if v is None:
-                        del included_launch_file_args[k]
-
                 log_save_dir = f'{self.log_output_base_dir}' + "/" + \
                     scenario_id + "_" + str(n) + "_" + \
                     scenario_path.stem + ".bag"
 
-                launch_description_args = {
-                    'launch_path': str(self.launch_path),
-                    'vehicle_model': self.vehicle_model,
-                    'scenario_runner_args': scenario_runner_args,
-                    'included_launch_file_args': included_launch_file_args,
-                    'log_save_dir': log_save_dir
-                }
-
-                # remove None value
-                for k, v in list(launch_description_args):
-                    if v is None:
-                        del launch_description_args[k]
-
-                ld = launch_description(**launch_description_args)
+                ld = launch_description(
+                    launch_path=str(self.launch_path),
+                    vehicle_model=self.vehicle_model,
+                    scenario_runner_args=scenario_runner_args,
+                    included_launch_file_args=included_launch_file_args,
+                    log_save_dir=log_save_dir)
                 ls.include_launch_description(ld)
                 ls.run()
                 ls.shutdown()
@@ -195,9 +183,11 @@ def main():
         help='Scenario path [overrides the value from scenario_database.json]')
     parser.add_argument(
         '--vehicle_model',
+        default='lexus',
         help='Vehicle model')
     parser.add_argument(
         '--sensor_model',
+        default='aip_xx1',
         help='Sensor model')
     args = parser.parse_args()
 
