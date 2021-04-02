@@ -129,11 +129,16 @@ class Launcher:
                     'perception/enable_detection_failure': "False",
                     'sensing/visible_range': "1000.0",
                 }
+
+
+                log_save_dir = f'{self.log_output_base_dir}' + "/" + scenario_id + "_" + str(n) + "_"+ scenario_path.stem + ".bag"
+
                 ld = launch_description(
                     launch_path=str(self.launch_path),
                     vehicle_model=self.vehicle_model,
                     scenario_runner_args=scenario_runner_args,
-                    included_launch_file_args=included_launch_file_args
+                    included_launch_file_args=included_launch_file_args,
+                    log_save_dir = log_save_dir
                 )
                 ls.include_launch_description(ld)
                 ls.run()

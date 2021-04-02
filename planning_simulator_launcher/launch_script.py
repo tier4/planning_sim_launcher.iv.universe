@@ -14,7 +14,7 @@ from launch.substitutions import LaunchConfiguration
 
 import launch
 
-def launch_description(*, launch_path, vehicle_model, scenario_runner_args, included_launch_file_args):
+def launch_description(*, launch_path, vehicle_model, scenario_runner_args, included_launch_file_args, log_save_dir):
     vehicle_package = f'{vehicle_model}_description'
     vehicle_package_path = FindPackageShare(vehicle_package).find(vehicle_package)
     vehicle_info_param_path = Path(vehicle_package_path) / 'config' / 'vehicle_info.param.yaml'
@@ -70,8 +70,15 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
             )
         )
 
+    rosbag_record = ExecuteProcess(
+        cmd=['ros2', 'bag', 'record', '-a', '-b', str(1024*1024*1024*2), '--compression-mode', 'file', '--compression-format', 'zstd',  '-o', log_save_dir],
+        output='screen'
+    )
+    # maximum bag size: 2G
+
     return LaunchDescription([
         scenario_runner,
         psim,
+        rosbag_record,
         shutdown_handler,
     ])
