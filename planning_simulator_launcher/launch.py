@@ -38,8 +38,11 @@ class Database:
 
         print('    Validating => ', end='')
 
-        autoware_launch_package_path = FindPackageShare("autoware_launch").find("autoware_launch")
-        autoware_launch_path = Path(autoware_launch_package_path) / 'launch' / 'planning_simulator.launch.xml'
+        package_name = database.get('launch_package_name', 'autoware_launch')
+        filename = database.get('launch_filename', 'planning_simulator.launch.xml')
+
+        autoware_launch_package_path = FindPackageShare(package_name).find(package_name)
+        autoware_launch_path = Path(autoware_launch_package_path) / 'launch' / filename
         self.launch_path = autoware_launch_path
 
 
@@ -129,12 +132,24 @@ class Launcher:
                     'perception/enable_detection_failure': "False",
                     'sensing/visible_range': "1000.0",
                 }
-                ld = launch_description(
-                    launch_path=str(self.launch_path),
-                    vehicle_model=self.vehicle_model,
-                    scenario_runner_args=scenario_runner_args,
-                    included_launch_file_args=included_launch_file_args
-                )
+
+                # remove unused parameter
+                for k, v in list(included_launch_file_args.items()):
+                    if v is None:
+                        del included_launch_file_args[k]
+
+                launch_description_args = {
+                    'launch_path': str(self.launch_path),
+                    'vehicle_model': self.vehicle_model,
+                    'scenario_runner_args': scenario_runner_args,
+                    'included_launch_file_args': included_launch_file_args,
+                }
+
+                for k, v in list(launch_description_args):
+                    if v is None:
+                        del launch_description_args[k]
+
+                ld = launch_description(**launch_description_args)
                 ls.include_launch_description(ld)
                 ls.run()
                 ls.shutdown()
@@ -168,11 +183,9 @@ def main():
         help='Scenario path [overrides the value from scenario_database.json]')
     parser.add_argument(
         '--vehicle_model',
-        default='lexus',
         help='Vehicle model')
     parser.add_argument(
         '--sensor_model',
-        default='aip_xx1',
         help='Sensor model')
     args = parser.parse_args()
 
