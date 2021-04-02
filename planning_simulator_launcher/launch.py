@@ -130,7 +130,6 @@ class Launcher:
                     'json_dump_path': f'{self.log_output_base_dir}/result-of-{scenario_path.stem}.json',
                     'camera_frame_id': 'camera5/camera_optical_link',
                 }
-                
                 included_launch_file_args = {
                     'map_path': self.map_path(parser),
                     'sensor_model': self.sensor_model,
@@ -149,7 +148,8 @@ class Launcher:
                     vehicle_model=self.vehicle_model,
                     scenario_runner_args=scenario_runner_args,
                     included_launch_file_args=included_launch_file_args,
-                    log_save_dir=log_save_dir)
+                    log_save_dir=log_save_dir
+                )
                 ls.include_launch_description(ld)
                 ls.run()
                 ls.shutdown()
