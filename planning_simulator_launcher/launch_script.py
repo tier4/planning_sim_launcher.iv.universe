@@ -14,10 +14,14 @@ from launch.substitutions import LaunchConfiguration
 
 import launch
 
-def launch_description(*, launch_path, vehicle_model, scenario_runner_args, included_launch_file_args, log_save_dir):
+
+def launch_description(*, launch_path, vehicle_model,
+                       scenario_runner_args, included_launch_file_args, log_save_dir):
     vehicle_package = f'{vehicle_model}_description'
-    vehicle_package_path = FindPackageShare(vehicle_package).find(vehicle_package)
-    vehicle_info_param_path = Path(vehicle_package_path) / 'config' / 'vehicle_info.param.yaml'
+    vehicle_package_path = FindPackageShare(
+        vehicle_package).find(vehicle_package)
+    vehicle_info_param_path = Path(
+        vehicle_package_path) / 'config' / 'vehicle_info.param.yaml'
     scenario_runner = Node(
         package='scenario_runner',
         executable='scenario_runner_node',
@@ -32,8 +36,8 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
             ("input/autoware_state", "/autoware/state"),
             ("input/vehicle_twist", "/vehicle/status/twist"),
             ("input/signal_command", "/vehicle/status/turn_signal"),
-            ("input/engage","/simulation/npc_simulator/engage"),
-            ("input/ego_vehicle_pose","/current_pose"),
+            ("input/engage", "/simulation/npc_simulator/engage"),
+            ("input/ego_vehicle_pose", "/current_pose"),
             ("output/start_point", "/initialpose"),
             ("output/initial_velocity", "/initialtwist"),
             ("output/goal_point", "/planning/mission_planning/goal"),
@@ -45,12 +49,13 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
             ("output/object_info", "/simulation/npc_simulator/object_info"),
             ("output/traffic_detection_result", "/perception/traffic_light_recognition/traffic_light_states"),  # noqa: E501
             ("output/lane_change_permission", "/planning/scenario_planning/lane_driving/lane_change_approval"),  # noqa: E501
-            ("output/dynamic_object_info" ,"/simulation/dummy_perception_publisher/object_info"),
-            ("output/debug_object_info","/simulation/npc_simulator/ground_truth_object_info")
+            ("output/dynamic_object_info",
+     "/simulation/dummy_perception_publisher/object_info"),
+            ("output/debug_object_info",
+     "/simulation/npc_simulator/ground_truth_object_info")
         ],
         # sigterm_timeout=???, TODO
     )
-
 
     psim = IncludeLaunchDescription(
         FrontendLaunchDescriptionSource(
@@ -62,16 +67,27 @@ def launch_description(*, launch_path, vehicle_model, scenario_runner_args, incl
 
     # shutdown other processes when scenario_runner has died
     shutdown_handler = launch.actions.RegisterEventHandler(
-            event_handler=launch.event_handlers.OnProcessExit(
-                target_action=scenario_runner,
-                on_exit=[
-                    launch.actions.EmitEvent(event=launch.events.Shutdown()),
-                ]
-            )
+        event_handler=launch.event_handlers.OnProcessExit(
+            target_action=scenario_runner,
+            on_exit=[
+                launch.actions.EmitEvent(event=launch.events.Shutdown()),
+            ]
         )
+    )
 
     rosbag_record = ExecuteProcess(
-        cmd=['ros2', 'bag', 'record', '-a', '-b', str(1024*1024*1024*2), '--compression-mode', 'file', '--compression-format', 'zstd',  '-o', log_save_dir],
+        cmd=['ros2',
+             'bag',
+             'record',
+             '-a',
+             '-b',
+             str(1024 * 1024 * 1024 * 2),
+             '--compression-mode',
+             'file',
+             '--compression-format',
+             'zstd',
+             '-o',
+             log_save_dir],
         output='screen'
     )
     # maximum bag size: 2G

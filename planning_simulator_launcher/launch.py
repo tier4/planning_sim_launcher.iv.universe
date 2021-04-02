@@ -38,10 +38,11 @@ class Database:
 
         print('    Validating => ', end='')
 
-        autoware_launch_package_path = FindPackageShare("autoware_launch").find("autoware_launch")
-        autoware_launch_path = Path(autoware_launch_package_path) / 'launch' / 'planning_simulator.launch.xml'
+        autoware_launch_package_path = FindPackageShare(
+            "autoware_launch").find("autoware_launch")
+        autoware_launch_path = Path(
+            autoware_launch_package_path) / 'launch' / 'planning_simulator.launch.xml'
         self.launch_path = autoware_launch_path
-
 
         # Check if it exists, because the error message if we try to access it
         # later is not helpful.
@@ -49,11 +50,17 @@ class Database:
             raise ValueError(f"launch_path '{self.launch_path}' is not a file")
 
         base_dir = ""
-        self.log_output_base_dir = absolute_path(database['log_output_base_dir'], base_dir)
+        self.log_output_base_dir = absolute_path(
+            database['log_output_base_dir'], base_dir)
 
-        self.map = {name: absolute_path(path, base_dir) for name, path in database['map'].items()}
+        self.map = {
+            name: absolute_path(
+                path,
+                base_dir) for name,
+            path in database['map'].items()}
 
-        self.scenario = [absolute_path(path, base_dir) for path in database['scenario']]
+        self.scenario = [absolute_path(path, base_dir)
+                         for path in database['scenario']]
         for path in self.scenario:
             if not path.is_file():
                 raise ValueError(f"scenario '{path}' is not a file")
@@ -69,7 +76,8 @@ class Launcher:
         self.launch_path = args.launch_path or database.launch_path
         self.log_output_base_dir = args.log_output_base_dir or database.log_output_base_dir
         # Similar, but wrap it in a list
-        self.scenarios = [args.scenario] if args.scenario else database.scenario
+        self.scenarios = [
+            args.scenario] if args.scenario else database.scenario
         self.map = database.map
         self.timeout = args.timeout
         self.log_output_type = args.log_output
@@ -107,7 +115,8 @@ class Launcher:
             parser = ScenarioParser(str(scenario_path), generate_mode=True)
 
             n_total = len(parser.scenario_files_path)
-            for n, scenario_path in enumerate(parser.scenario_files_path, start=1):
+            for n, scenario_path in enumerate(
+                    parser.scenario_files_path, start=1):
                 ls = launch.LaunchService()
                 scenario_path = Path(scenario_path)
                 print(f'\nLaunch {n} of {n_total}')
@@ -130,15 +139,16 @@ class Launcher:
                     'sensing/visible_range': "1000.0",
                 }
 
-
-                log_save_dir = f'{self.log_output_base_dir}' + "/" + scenario_id + "_" + str(n) + "_"+ scenario_path.stem + ".bag"
+                log_save_dir = f'{self.log_output_base_dir}' + "/" + \
+                    scenario_id + "_" + str(n) + "_" + \
+                    scenario_path.stem + ".bag"
 
                 ld = launch_description(
                     launch_path=str(self.launch_path),
                     vehicle_model=self.vehicle_model,
                     scenario_runner_args=scenario_runner_args,
                     included_launch_file_args=included_launch_file_args,
-                    log_save_dir = log_save_dir
+                    log_save_dir=log_save_dir
                 )
                 ls.include_launch_description(ld)
                 ls.run()
