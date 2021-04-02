@@ -1,6 +1,8 @@
 {
     "launch_path" : "${CMAKE_CURRENT_SOURCE_DIR}/launch/planning_simulator.launch",
     "log_output_base_dir" : "${CMAKE_CURRENT_SOURCE_DIR}/scenario/log",
+    "launch_package_name": "autoware_launch",
+    "launch_filename": "planning_simulator.launch.xml",
     "map" : {
         "kashiwanoha" : "${CMAKE_CURRENT_SOURCE_DIR}"
     },
