@@ -38,11 +38,11 @@ class Database:
 
         print('    Validating => ', end='')
 
-        autoware_launch_package_path = FindPackageShare(
-            "autoware_launch").find("autoware_launch")
-        autoware_launch_path = Path(
-            autoware_launch_package_path) / 'launch' / 'planning_simulator.launch.xml'
-        self.launch_path = autoware_launch_path
+        package_name = database.get('launch_package_name', 'autoware_launch')
+        filename = database.get('launch_filename', 'planning_simulator.launch.xml')
+
+        autoware_launch_package_path = FindPackageShare(package_name).find(package_name)
+        self.launch_path = Path(autoware_launch_package_path) / 'launch' / filename
 
         # Check if it exists, because the error message if we try to access it
         # later is not helpful.
