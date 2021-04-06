@@ -74,6 +74,12 @@ ros2 run planning_simulator_launcher launch_main --database /path/to/AutowareArc
 
 ```
 
+list option 
+#### --database _D_ ... use scenario_database.json in _D_
+#### --vehicle_model _V_... Use vehicle Model _V_
+#### --sensor_model _S_ ... Use sensor Model _S_
+#### --record-rosbag ... Record rosbag
+
 
 <br/>
 
@@ -93,45 +99,45 @@ This section contains information for developers.
 
 ### Action Supporting Status
 
-| Private Action   | Ego | Vehicle | MotorBike | Bicycle | Pedestrian |
-|:-----------------|:---:|:-------:|:---------:|:-------:|:----------:|
-| Acceleration     | -   | ✓       | ✓         | ✓       | ✓          |
-| Enable           | -   | ✓       | ✓         | ✓       | ✓          |
-| FollowRoute      | ✓   | ✓       | ✓         | ✓       | ✓          |
-| FollowTrajectory | -   | -       | ✗         | ✗       | ✗          |
-| LaneChange       | -   | ✓       | ✓         | ✓       | -          |
-| Pose             | -   | ✗       | ✗         | ✗       | ✗          |
-| RelativeSpeed    | -   | ✗       | ✗         | ✗       | ✗          |
-| Speed            | (1) | ✓       | ✓         | ✓       | ✓          |
+| Private Action   |  Ego  | Vehicle | MotorBike | Bicycle | Pedestrian |
+| :--------------- | :---: | :-----: | :-------: | :-----: | :--------: |
+| Acceleration     |   -   |    ✓    |     ✓     |    ✓    |     ✓      |
+| Enable           |   -   |    ✓    |     ✓     |    ✓    |     ✓      |
+| FollowRoute      |   ✓   |    ✓    |     ✓     |    ✓    |     ✓      |
+| FollowTrajectory |   -   |    -    |     ✗     |    ✗    |     ✗      |
+| LaneChange       |   -   |    ✓    |     ✓     |    ✓    |     -      |
+| Pose             |   -   |    ✗    |     ✗     |    ✗    |     ✗      |
+| RelativeSpeed    |   -   |    ✗    |     ✗     |    ✗    |     ✗      |
+| Speed            |  (1)  |    ✓    |     ✓     |    ✓    |     ✓      |
 
-| Global Action    | Supporting |
-|:-----------------|:----------:|
-| ChangeSignal     | ✓          |
+| Global Action | Supporting |
+| :------------ | :--------: |
+| ChangeSignal  |     ✓      |
 
 (1) Because Autoware calculates speed automatically, the scenario runner implicitly treats Speed Action for the Type: Ego entity as the maximum speed setting.
 
 ### Condition Supporting Status
 
 | Logical Operator | Supporting |
-|:-----------------|:----------:|
-| All              | ✓          |
-| Any              | ✓          |
+| :--------------- | :--------: |
+| All              |     ✓      |
+| Any              |     ✓      |
 
-| Private Condition | Ego | Vehicle | MotorBike | Bicycle | Pedestrian |
-|:------------------|:---:|:-------:|:---------:|:-------:|:----------:|
-| Acceleration      | ✓   | ✓       | ✓         | ✓       | ✓          |
-| CollisionByEntity | ✓   | ✓       | ✓         | ✓       | ✓          |
-| CollisionByType   | ✗   | ✗       | ✗         | ✗       | ✗          |
-| EndOfRoad         | ✗   | ✗       | ✗         | ✗       | ✗          |
-| Offroad           | ✗   | ✗       | ✗         | ✗       | ✗          |
-| ReachPosition     | ✓   | ✓       | ✓         | ✓       | ✓          |
-| RelativeDistance  | ✓   | ✓       | ✓         | ✓       | ✓          |
-| Speed             | ✓   | ✓       | ✓         | ✓       | ✓          |
+| Private Condition |  Ego  | Vehicle | MotorBike | Bicycle | Pedestrian |
+| :---------------- | :---: | :-----: | :-------: | :-----: | :--------: |
+| Acceleration      |   ✓   |    ✓    |     ✓     |    ✓    |     ✓      |
+| CollisionByEntity |   ✓   |    ✓    |     ✓     |    ✓    |     ✓      |
+| CollisionByType   |   ✗   |    ✗    |     ✗     |    ✗    |     ✗      |
+| EndOfRoad         |   ✗   |    ✗    |     ✗     |    ✗    |     ✗      |
+| Offroad           |   ✗   |    ✗    |     ✗     |    ✗    |     ✗      |
+| ReachPosition     |   ✓   |    ✓    |     ✓     |    ✓    |     ✓      |
+| RelativeDistance  |   ✓   |    ✓    |     ✓     |    ✓    |     ✓      |
+| Speed             |   ✓   |    ✓    |     ✓     |    ✓    |     ✓      |
 
 | Global Condition | Supporting |
-|:-----------------|:----------:|
-| Signal           | ✓          |
-| SimulationTime   | ✓          |
+| :--------------- | :--------: |
+| Signal           |     ✓      |
+| SimulationTime   |     ✓      |
 
 ## 5. Log file format
 
