@@ -74,6 +74,14 @@ ros2 run planning_simulator_launcher launch_main --database /path/to/AutowareArc
 
 ```
 
+list option 
+```
+--database Directory of scenario_database.json 
+--vehicle_model ... Vehicle Model 
+--sensor_model ... Sensor Model
+--record-rosbag ... Record rosbag or not
+```
+
 
 <br/>
 
