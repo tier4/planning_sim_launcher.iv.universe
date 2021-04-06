@@ -96,7 +96,7 @@ def launch_description(*, launch_path, vehicle_model,
         sigterm_timeout=LaunchConfiguration(
             'sigterm_timeout', default=30),
         sigkill_timeout=LaunchConfiguration(
-            'sigkill_timeout', default=30)
+            'sigkill_timeout', default=30),
         condition=IfCondition(record_condition)
     )
     # maximum bag size: 10G
