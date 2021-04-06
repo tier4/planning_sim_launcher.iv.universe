@@ -88,7 +88,11 @@ def launch_description(*, launch_path, vehicle_model,
              'zstd',
              '-o',
              log_save_dir],
-        output='screen'
+        output='screen',
+        sigterm_timeout=LaunchConfiguration(
+            'sigterm_timeout', default=30),
+        sigkill_timeout=LaunchConfiguration(
+            'sigkill_timeout', default=30)
     )
     # maximum bag size: 2G
 
