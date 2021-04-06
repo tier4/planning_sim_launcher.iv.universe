@@ -196,7 +196,7 @@ def main():
         help='Sensor model')
     parser.add_argument(
         '--record-rosbag',
-        default='false',
+        action="store_true",
         help='record rosbag or not')
     args = parser.parse_args()
 
