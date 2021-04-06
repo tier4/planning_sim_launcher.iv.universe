@@ -39,10 +39,13 @@ class Database:
         print('    Validating => ', end='')
 
         package_name = database.get('launch_package_name', 'autoware_launch')
-        filename = database.get('launch_filename', 'planning_simulator.launch.xml')
+        filename = database.get(
+            'launch_filename', 'planning_simulator.launch.xml')
 
-        autoware_launch_package_path = FindPackageShare(package_name).find(package_name)
-        self.launch_path = Path(autoware_launch_package_path) / 'launch' / filename
+        autoware_launch_package_path = FindPackageShare(
+            package_name).find(package_name)
+        self.launch_path = Path(
+            autoware_launch_package_path) / 'launch' / filename
 
         # Check if it exists, because the error message if we try to access it
         # later is not helpful.
@@ -83,6 +86,7 @@ class Launcher:
         self.log_output_type = args.log_output
         self.vehicle_model = args.vehicle_model
         self.sensor_model = args.sensor_model
+        self.record_rosbag = args.record_rosbag
 
     # Look up the map name in the scenario in scenario_database.json
     def map_path(self, parser: ScenarioParser) -> Path:
@@ -148,6 +152,7 @@ class Launcher:
                     vehicle_model=self.vehicle_model,
                     scenario_runner_args=scenario_runner_args,
                     included_launch_file_args=included_launch_file_args,
+                    record_rosbag=self.record_rosbag,
                     log_save_dir=log_save_dir
                 )
                 ls.include_launch_description(ld)
@@ -189,6 +194,10 @@ def main():
         '--sensor_model',
         default='aip_xx1',
         help='Sensor model')
+    parser.add_argument(
+        '--record-rosbag',
+        default='false',
+        help='record rosbag or not')
     args = parser.parse_args()
 
     launcher = Launcher(args)

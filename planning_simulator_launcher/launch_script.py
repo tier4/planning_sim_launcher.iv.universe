@@ -6,17 +6,19 @@ from launch_xml import Parser
 
 from launch import LaunchContext, LaunchDescription
 from launch.actions import (ExecuteProcess, IncludeLaunchDescription,
-                            RegisterEventHandler, Shutdown)
+                            RegisterEventHandler, Shutdown, DeclareLaunchArgument)
 from launch.event import Event
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import FrontendLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition
 
 import launch
 
 
 def launch_description(*, launch_path, vehicle_model,
-                       scenario_runner_args, included_launch_file_args, log_save_dir):
+                       scenario_runner_args, included_launch_file_args,
+                       record_rosbag, log_save_dir):
     vehicle_package = f'{vehicle_model}_description'
     vehicle_package_path = FindPackageShare(
         vehicle_package).find(vehicle_package)
@@ -75,6 +77,8 @@ def launch_description(*, launch_path, vehicle_model,
         )
     )
 
+    record_condition = LaunchConfiguration(
+        'record_rosbag', default=record_rosbag)
     rosbag_record = ExecuteProcess(
         cmd=['ros2',
              'bag',
@@ -93,8 +97,9 @@ def launch_description(*, launch_path, vehicle_model,
             'sigterm_timeout', default=30),
         sigkill_timeout=LaunchConfiguration(
             'sigkill_timeout', default=30)
+        condition=IfCondition(record_condition)
     )
-    # maximum bag size: 2G
+    # maximum bag size: 10G
 
     return LaunchDescription([
         scenario_runner,
