@@ -85,11 +85,7 @@ def launch_description(*, launch_path, vehicle_model,
              'record',
              '-a',
              '-b',
-             str(1024 * 1024 * 1024 * 2),
-             '--compression-mode',
-             'file',
-             '--compression-format',
-             'zstd',
+             str(1024 * 1024 * 1024 * 5),
              '-o',
              log_save_dir],
         output='screen',
@@ -99,7 +95,7 @@ def launch_description(*, launch_path, vehicle_model,
             'sigkill_timeout', default=30),
         condition=IfCondition(record_condition)
     )
-    # maximum bag size: 10G
+    # maximum bag size: 5G
 
     return LaunchDescription([
         scenario_runner,
