@@ -4,6 +4,8 @@ import time
 import json
 from pathlib import Path
 from typing import Optional, Union
+import threading
+import time
 
 from launch_ros.substitutions import FindPackageShare
 import launch
@@ -156,7 +158,23 @@ class Launcher:
                     log_save_dir=log_save_dir
                 )
                 ls.include_launch_description(ld)
+
+                # set timeout to launch
+                def ls_shutdown(ls, timeout):
+                    global th_stop
+                    th_stop = False
+                    start = time.time()
+                    while(time.time()-start < timeout):
+                        if th_stop:
+                            return
+                        time.sleep(1.0)
+                    print("Simulation Timeout")
+                    ls.shutdown()
+                t = threading.Thread(target=ls_shutdown,
+                                     args=(ls, self.timeout))
+                t.start()
                 ls.run()
+                th_stop = True  # stop ls_shutdown
                 ls.shutdown()
 
 
