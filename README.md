@@ -1,5 +1,7 @@
 # Autoware Planning Simulator Launcher
 
+**This repository is archived as planning simulator is replaced with [scenario_simulator_v2](https://github.com/tier4/scenario_simulator_v2/tree/master/test_runner/scenario_test_runner)**
+
 Planning Simulator Launcher is being developed to assist in the definitive planning
 simulation of Autoware.
 
